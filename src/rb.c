@@ -344,7 +344,7 @@ repl:
   newnode->color          = X->color;
 
   alc->free(X);
-  X = P->chld[sX] = newnode;
+  P->chld[sX] = newnode;
   return;
 err:
   alc->free(newnode);
