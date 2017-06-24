@@ -249,7 +249,9 @@ test_rb_topdown_custom_cmp(void **state) {
   int       count, i;
 
   count = 1000;
-  tree  = rb_newtree(test_rb_cmp_float, test_rb_print_float);
+  tree  = rb_newtree(NULL,
+                     test_rb_cmp_float,
+                     test_rb_print_float);
 
   srand((unsigned int)time(NULL));
 
@@ -296,7 +298,9 @@ test_rb_topdown_freeenode(void **state) {
   int       count, i;
 
   count = 1000;
-  tree  = rb_newtree(test_rb_cmp_float, test_rb_print_float);
+  tree  = rb_newtree(NULL,
+                     test_rb_cmp_float,
+                     test_rb_print_float);
   tree->freeFn = test_rb_freenode;
 
   srand((unsigned int)time(NULL));

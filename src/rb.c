@@ -21,7 +21,9 @@
  * cX: color of X
  */
 
+#include "common.h"
 #include "../include/ds/rb.h"
+#include "default/default.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -86,18 +88,23 @@ rb_free(RBTree *tree, RBNode *node) {
     if (tree->freeNode)
       tree->freeNode(tree, node);
 
-    free(node);
+    tree->alc->free(node);
   }
 }
 
 RBTree*
-rb_newtree(RBCmpFn cmp, RBPrintFn print) {
-  RBTree *tree;
-  RBNode *rootNode, *nullNode;
+rb_newtree(DsAllocator *allocator,
+           RBCmpFn      cmp,
+           RBPrintFn    print) {
+  DsAllocator *alc;
+  RBTree      *tree;
+  RBNode      *rootNode, *nullNode;
 
-  tree     = calloc(sizeof(*tree), 1);
-  rootNode = calloc(sizeof(*rootNode), 1);
-  nullNode = calloc(sizeof(*rootNode), 1);
+  alc      = !allocator ? ds_def_alc() : allocator;
+
+  tree     = alc->calloc(sizeof(*tree), 1);
+  rootNode = alc->calloc(sizeof(*rootNode), 1);
+  nullNode = alc->calloc(sizeof(*rootNode), 1);
 
   assert(tree && rootNode && nullNode);
 
@@ -112,6 +119,7 @@ rb_newtree(RBCmpFn cmp, RBPrintFn print) {
   tree->root     = rootNode;
   tree->nullNode = nullNode;
 
+  tree->alc   = alc;
   tree->cmp   = cmp   ? cmp   : rb_def_cmp_str;
   tree->print = print ? print : rb_def_print_str;
   tree->count = 0;
@@ -121,12 +129,14 @@ rb_newtree(RBCmpFn cmp, RBPrintFn print) {
 
 RBTree*
 rb_newtree_str() {
-  return rb_newtree(NULL, NULL);
+  return rb_newtree(NULL, NULL, NULL);
 }
 
 RBTree*
 rb_newtree_ptr() {
-  return rb_newtree(rb_def_cmp_ptr, rb_def_print_ptr);
+  return rb_newtree(NULL,
+                    rb_def_cmp_ptr,
+                    rb_def_print_ptr);
 }
 
 void
@@ -147,28 +157,33 @@ rb_isempty(RBTree *tree) {
 
 void
 rb_destroy(RBTree *tree) {
-  RBNode *node;
+  DsAllocator *alc;
+  RBNode      *node;
 
+  alc  = tree->alc;
   node = tree->root->chld[RB_RIGHT];
   if (node != tree->nullNode)
     rb_free(tree, tree->root->chld[RB_RIGHT]);
 
-  free(tree->root);
-  free(tree->nullNode);
-  free(tree);
+  alc->free(tree->root);
+  alc->free(tree->nullNode);
+  alc->free(tree);
 }
 
 void
 rb_insert(RBTree *tree,
           void   *key,
           void   *val) {
-  RBNode *newnode;
-  RBNode *X, *P, *G, *Q, *W;
-  int     sQ, sG, sP, sX, cmp;
-  bool    replace;
+  DsAllocator *alc;
+  RBNode      *newnode;
+  RBNode      *X, *P, *G, *Q, *W;
+  int          sQ, sG, sP, sX, cmp;
+  bool         replace;
+
+  alc = tree->alc;
 
   replace = rb_replace;
-  newnode = malloc(sizeof(*newnode));
+  newnode = alc->malloc(sizeof(*newnode));
   newnode->chld[RB_LEFT]  = tree->nullNode;
   newnode->chld[RB_RIGHT] = tree->nullNode;
   newnode->key = key;
@@ -309,21 +324,24 @@ repl:
   newnode->chld[RB_RIGHT] = X->chld[RB_RIGHT];
   newnode->color          = X->color;
 
-  free(X);
+  alc->free(X);
   X = P->chld[sX] = newnode;
   return;
 err:
-  free(newnode);
+  alc->free(newnode);
 }
 
 void
 rb_remove(RBTree *tree, void *key) {
-  RBNode *X, *P, *T, *G, *toDel, *toDelP;
-  int     sP, sX, cmpRet, sDel;
-  int     c2b;
+  DsAllocator *alc;
+  RBNode      *X, *P, *T, *G, *toDel, *toDelP;
+  int          sP, sX, cmpRet, sDel;
+  int          c2b;
 
   if (!key || key == rb_emptystr)
     return;
+
+  alc    = tree->alc;
 
   sX     = RB_RIGHT;
   G      = tree->root;
@@ -495,7 +513,7 @@ rb_remove(RBTree *tree, void *key) {
     G->chld[sP] = tree->nullNode;
   }
 
-  free(toDel);
+  alc->free(toDel);
   tree->count--;
 }
 
@@ -534,31 +552,31 @@ rb_find_node(RBTree *tree, void *key) {
 
 int
 rb_parent(RBTree *tree, void *key, RBNode **dest) {
-   RBNode *iter, *parent;
-   int side, cmpRet;
+  RBNode *iter, *parent;
+  int side, cmpRet;
 
-   side   = RB_RIGHT;
-   iter   = tree->root->chld[side];
-   parent = tree->root;
-   cmpRet = -1;
+  side   = RB_RIGHT;
+  iter   = tree->root->chld[side];
+  parent = tree->root;
+  cmpRet = -1;
 
-   while (iter != tree->nullNode) {
-      cmpRet = tree->cmp(iter->key, key);
+  while (iter != tree->nullNode) {
+    cmpRet = tree->cmp(iter->key, key);
 
-      if (cmpRet == 0)
-         break;
+    if (cmpRet == 0)
+      break;
 
-      side   = cmpRet < 0;
-      parent = iter;
-      iter   = iter->chld[side];
-   }
+    side   = cmpRet < 0;
+    parent = iter;
+    iter   = iter->chld[side];
+  }
 
-   if (cmpRet != 0)
-      *dest = NULL;
-   else
-      *dest = parent;
+  if (cmpRet != 0)
+    *dest = NULL;
+  else
+    *dest = parent;
 
-   return side;
+  return side;
 }
 
 void

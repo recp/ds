@@ -9,6 +9,9 @@
 extern "C" {
 #endif
 
+#include "common.h"
+#include "allocator.h"
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -26,22 +29,25 @@ typedef struct RBNode {
   void          *key;
   void          *val;
   struct RBNode *chld[2];
-  uint8_t        color;
+  uint8_t        color:1;
 } RBNode;
 
 typedef struct RBTree {
-  RBNode   *root;
-  RBNode   *nullNode;
-  RBCmpFn   cmp;
-  RBPrintFn print;
-  RBWalkFn  freeNode;
-  RBFreeFn  freeFn;
-  RBFoundFn foundFn; /* fires for duplicates */
-  size_t    count;
+  DsAllocator *alc;
+  RBNode      *root;
+  RBNode      *nullNode;
+  RBCmpFn      cmp;
+  RBPrintFn    print;
+  RBWalkFn     freeNode;
+  RBFreeFn     freeFn;
+  RBFoundFn    foundFn; /* fires for duplicates */
+  size_t       count;
 } RBTree;
 
 RBTree*
-rb_newtree(RBCmpFn cmp, RBPrintFn print);
+rb_newtree(DsAllocator *allocator,
+           RBCmpFn      cmp,
+           RBPrintFn    print);
 
 RBTree*
 rb_newtree_str(void);
