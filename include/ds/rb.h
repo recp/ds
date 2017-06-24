@@ -11,6 +11,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 struct RBTree;
 struct RBNode;
@@ -76,6 +77,9 @@ rb_assert(RBTree *tree, RBNode *root);
 
 void
 rb_empty(RBTree *tree);
+
+bool
+rb_isempty(RBTree *tree);
 
 void
 rb_destroy(RBTree *tree);

@@ -139,6 +139,11 @@ rb_empty(RBTree *tree) {
   tree->root->chld[RB_RIGHT] = tree->nullNode;
 }
 
+bool
+rb_isempty(RBTree *tree) {
+  return tree->root->chld[RB_RIGHT] == tree->nullNode;
+}
+
 void
 rb_destroy(RBTree *tree) {
   RBNode *node;
