@@ -19,6 +19,7 @@ struct RBNode;
 typedef int  (*RBCmpFn)(void *, void *);
 typedef void (*RBPrintFn)(void *);
 typedef void (*RBWalkFn)(struct RBTree *tree, struct RBNode *node);
+typedef void (*RBFoundFn)(struct RBTree *tree, void *key, bool *replace);
 typedef void (*RBFreeFn)(void *);
 
 typedef struct RBNode {
@@ -35,6 +36,7 @@ typedef struct RBTree {
   RBPrintFn print;
   RBWalkFn  freeNode;
   RBFreeFn  freeFn;
+  RBFoundFn foundFn; /* fires for duplicates */
   size_t    count;
 } RBTree;
 

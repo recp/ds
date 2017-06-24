@@ -37,6 +37,7 @@
 #define RB_ISBLCK(R)  (R->color == RB_BLCK)
 
 static const char *rb_emptystr = "";
+static const bool  rb_replace  = true;
 
 void
 rb_printi(RBTree *tree, RBNode *node);
@@ -163,8 +164,10 @@ rb_insert(RBTree *tree,
           void   *val) {
   RBNode *newnode;
   RBNode *X, *P, *G, *Q, *W;
-  int sQ, sG, sP, sX;
+  int     sQ, sG, sP, sX, cmp;
+  bool    replace;
 
+  replace = rb_replace;
   newnode = malloc(sizeof(*newnode));
   newnode->chld[RB_LEFT]  = tree->nullNode;
   newnode->chld[RB_RIGHT] = tree->nullNode;
@@ -239,15 +242,29 @@ rb_insert(RBTree *tree,
       }
     }
 
-    sQ = sG;
-    sG = sP;
-    sP = sX;
-    sX = !(tree->cmp(key, X->key) < 0);
-    W  = Q;
-    Q  = G;
-    G  = P;
-    P  = X;
-    X  = X->chld[sX];
+    cmp = tree->cmp(key, X->key);
+
+    /* found duplicate key */
+    if (!cmp) {
+      if (tree->foundFn)
+        tree->foundFn(tree, key, &replace);
+
+      if (!replace)
+        goto err;
+
+      /* replace */
+      goto repl;
+    }
+
+    sQ  = sG;
+    sG  = sP;
+    sP  = sX;
+    sX  = !(cmp < 0);
+    W   = Q;
+    Q   = G;
+    G   = P;
+    P   = X;
+    X   = X->chld[sX];
   } while (X != tree->nullNode);
 
   X = P->chld[sX] = newnode;
@@ -284,6 +301,19 @@ rb_insert(RBTree *tree,
   RB_MKBLCK(tree->root->chld[RB_RIGHT]);
 
   tree->count++;
+
+  return;
+
+repl:
+  newnode->chld[RB_LEFT]  = X->chld[RB_LEFT];
+  newnode->chld[RB_RIGHT] = X->chld[RB_RIGHT];
+  newnode->color          = X->color;
+
+  free(X);
+  X = P->chld[sX] = newnode;
+  return;
+err:
+  free(newnode);
 }
 
 void
