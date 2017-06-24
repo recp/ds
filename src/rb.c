@@ -623,45 +623,44 @@ rb_walk(RBTree *tree, RBWalkFn walkFn) {
  */
 int
 rb_assert(RBTree *tree, RBNode *root) {
-  int lh, rh;
-  if (root == tree->nullNode) {
+  RBNode *ln, *rn;
+  int     lh, rh;
+
+  if (root == tree->nullNode)
     return 1;
-  } else {
-    RBNode *ln, *rn;
 
-    ln = root->chld[0];
-    rn = root->chld[1];
+  ln = root->chld[0];
+  rn = root->chld[1];
 
-    /* Consecutive red links */
-    if (RB_ISRED(root)) {
-      if (RB_ISRED(ln) || RB_ISRED(rn)) {
-        puts("Red violation");
-        return 0;
-      }
-    }
-
-    lh = rb_assert(tree, ln);
-    rh = rb_assert(tree, rn);
-
-    /* Invalid binary search tree */
-    if ((ln != tree->nullNode
-         && tree->cmp(ln->key, root->key) > 0)
-        || (rn != tree->nullNode
-            && tree->cmp(rn->key, root->key) < 0)) {
-          puts("Binary tree violation");
-          return 0;
-        }
-
-    /* Black height mismatch */
-    if (lh != 0 && rh != 0 && lh != rh) {
-      puts("Black violation");
+  /* Consecutive red links */
+  if (RB_ISRED(root)) {
+    if (RB_ISRED(ln) || RB_ISRED(rn)) {
+      puts("Red violation");
       return 0;
     }
+  }
 
-    /* Only count black links */
-    if (lh != 0 && rh != 0)
-      return RB_ISRED(root) ? lh : lh + 1;
-    
+  lh = rb_assert(tree, ln);
+  rh = rb_assert(tree, rn);
+
+  /* Invalid binary search tree */
+  if ((ln != tree->nullNode
+       && tree->cmp(ln->key, root->key) > 0)
+      || (rn != tree->nullNode
+          && tree->cmp(rn->key, root->key) < 0)) {
+        puts("Binary tree violation");
+        return 0;
+      }
+
+  /* Black height mismatch */
+  if (lh != 0 && rh != 0 && lh != rh) {
+    puts("Black violation");
     return 0;
   }
+
+  /* Only count black links */
+  if (lh != 0 && rh != 0)
+    return RB_ISRED(root) ? lh : lh + 1;
+
+  return 0;
 }
