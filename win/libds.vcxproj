@@ -164,10 +164,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\ds\allocator.h" />
+    <ClInclude Include="..\include\ds\common.h" />
     <ClInclude Include="..\include\ds\rb.h" />
+    <ClInclude Include="..\include\ds\util.h" />
+    <ClInclude Include="..\src\common.h" />
+    <ClInclude Include="..\src\default\default.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\default\default.c" />
     <ClCompile Include="..\src\rb.c" />
+    <ClCompile Include="..\src\util.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

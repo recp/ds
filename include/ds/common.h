@@ -7,7 +7,7 @@
 #define common_h
 
 #if defined(_WIN32)
-#  ifdef _libds_dll
+#  ifdef LIBDS_DLL
 #    define DS_EXPORT __declspec(dllexport)
 #  else
 #    define DS_EXPORT __declspec(dllimport)

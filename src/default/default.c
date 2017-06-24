@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <malloc/malloc.h>
 
 DsAllocator ds__alc = {
   .malloc   = malloc,

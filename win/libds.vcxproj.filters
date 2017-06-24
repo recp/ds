@@ -19,14 +19,38 @@
     <Filter Include="include\ds">
       <UniqueIdentifier>{496b3b53-1258-4efa-87b2-4280ea82f87e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\default">
+      <UniqueIdentifier>{dedec597-3ca0-4b0f-900f-a8c36e5c496f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\ds\rb.h">
       <Filter>include\ds</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ds\allocator.h">
+      <Filter>include\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ds\common.h">
+      <Filter>include\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ds\util.h">
+      <Filter>include\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\default\default.h">
+      <Filter>src\default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\rb.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\default\default.c">
+      <Filter>src\default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\util.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
