@@ -38,10 +38,7 @@ test_rb_print_float(void *key) {
 
 static
 void
-test_rb_freenode(void *nodep) {
-  RBNode *node;
-  node = nodep;
-
+test_rb_freenode(RBTree *tree, RBNode *node) {
   assert_non_null(node);
   assert_non_null(node->val);
 
@@ -81,7 +78,7 @@ test_rb_topdown_str(void **state) {
 
   count = 1000;
   tree  = rb_newtree_str();
-  tree->foundFn = test_rb_foundkey;
+  tree->onFound = test_rb_foundkey;
 
   srand((unsigned int)time(NULL));
 
@@ -301,7 +298,7 @@ test_rb_topdown_freeenode(void **state) {
   tree  = rb_newtree(NULL,
                      test_rb_cmp_float,
                      test_rb_print_float);
-  tree->freeFn = test_rb_freenode;
+  tree->onFreeNode = test_rb_freenode;
 
   srand((unsigned int)time(NULL));
 

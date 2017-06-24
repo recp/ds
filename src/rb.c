@@ -47,7 +47,7 @@ rb_printi(RBTree *tree, RBNode *node);
 static
 void
 rb_walki(RBTree * __restrict tree,
-         RBWalkFn            walkFn,
+         RBNodeFn            walkFn,
          RBNode * __restrict node);
 
 static
@@ -57,8 +57,8 @@ rb_free(RBTree *tree, RBNode *node) {
     rb_free(tree, node->chld[RB_LEFT]);
     rb_free(tree, node->chld[RB_RIGHT]);
 
-    if (tree->freeNode)
-      tree->freeNode(tree, node);
+    if (tree->onFreeNode)
+      tree->onFreeNode(tree, node);
 
     tree->alc->free(node);
   }
@@ -233,8 +233,8 @@ rb_insert(RBTree *tree,
 
     /* found duplicate key */
     if (!cmp) {
-      if (tree->foundFn)
-        tree->foundFn(tree, key, &replace);
+      if (tree->onFound)
+        tree->onFound(tree, key, &replace);
 
       if (!replace)
         goto err;
@@ -576,7 +576,7 @@ rb_print(RBTree *tree) {
 static
 void
 rb_walki(RBTree * __restrict tree,
-         RBWalkFn            walkFn,
+         RBNodeFn            walkFn,
          RBNode * __restrict node) {
   if(node == tree->nullNode)
     return;
@@ -595,7 +595,7 @@ rb_walki(RBTree * __restrict tree,
 }
 
 void
-rb_walk(RBTree *tree, RBWalkFn walkFn) {
+rb_walk(RBTree *tree, RBNodeFn walkFn) {
   RBNode *rootNode;
 
   rootNode = tree->root->chld[RB_RIGHT];
