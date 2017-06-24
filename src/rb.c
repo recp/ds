@@ -591,15 +591,17 @@ rb_walki(RBTree * __restrict tree,
   if(node == tree->nullNode)
     return;
 
-  rb_walki(tree,
-           walkFn,
-           node->chld[RB_LEFT]);
+  if (node->chld[RB_LEFT] != tree->nullNode)
+    rb_walki(tree,
+             walkFn,
+             node->chld[RB_LEFT]);
 
   walkFn(tree, node);
 
-  rb_walki(tree,
-           walkFn,
-           node->chld[RB_RIGHT]);
+  if (node->chld[RB_RIGHT] != tree->nullNode)
+    rb_walki(tree,
+             walkFn,
+             node->chld[RB_RIGHT]);
 }
 
 void
