@@ -60,15 +60,16 @@ rb_free(RBTree *tree, RBNode *node);
 static
 void
 rb_free(RBTree *tree, RBNode *node) {
-  if(node != tree->nullNode) {
-    rb_free(tree, node->chld[RB_LEFT]);
-    rb_free(tree, node->chld[RB_RIGHT]);
+  if(node == tree->nullNode)
+    return;
 
-    if (tree->onFreeNode)
-      tree->onFreeNode(tree, node);
+  rb_free(tree, node->chld[RB_LEFT]);
+  rb_free(tree, node->chld[RB_RIGHT]);
 
-    tree->alc->free(node);
-  }
+  if (tree->onFreeNode)
+    tree->onFreeNode(tree, node);
+
+  tree->alc->free(node);
 }
 
 static

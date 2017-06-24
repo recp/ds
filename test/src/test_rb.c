@@ -44,7 +44,6 @@ test_rb_freenode(RBTree *tree, RBNode *node) {
 
   /* free value and node */
   free(node->val);
-  free(node);
 }
 
 void
