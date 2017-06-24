@@ -41,6 +41,7 @@
 static const char *rb_emptystr = "";
 static const bool  rb_replace  = true;
 
+static
 void
 rb_printi(RBTree *tree, RBNode *node);
 
@@ -49,6 +50,12 @@ void
 rb_walki(RBTree * __restrict tree,
          RBNodeFn            walkFn,
          RBNode * __restrict node);
+
+static
+void
+rb_free(RBTree *tree, RBNode *node);
+
+/* ------------------------------------------------------------------------- */
 
 static
 void
@@ -64,6 +71,40 @@ rb_free(RBTree *tree, RBNode *node) {
   }
 }
 
+static
+void
+rb_printi(RBTree *tree, RBNode *node) {
+  if(node != tree->nullNode) {
+    rb_printi(tree, node->chld[RB_LEFT]);
+    tree->print(node->key);
+    rb_printi(tree, node->chld[RB_RIGHT]);
+  }
+}
+
+static
+void
+rb_walki(RBTree * __restrict tree,
+         RBNodeFn            walkFn,
+         RBNode * __restrict node) {
+  if(node == tree->nullNode)
+    return;
+
+  if (node->chld[RB_LEFT] != tree->nullNode)
+    rb_walki(tree,
+             walkFn,
+             node->chld[RB_LEFT]);
+
+  walkFn(tree, node);
+
+  if (node->chld[RB_RIGHT] != tree->nullNode)
+    rb_walki(tree,
+             walkFn,
+             node->chld[RB_RIGHT]);
+}
+
+/* ------------------------------------------------------------------------- */
+
+DS_EXPORT
 RBTree*
 rb_newtree(DsAllocator *allocator,
            DsCmpFn      cmp,
@@ -99,11 +140,13 @@ rb_newtree(DsAllocator *allocator,
   return tree;
 }
 
+DS_EXPORT
 RBTree*
 rb_newtree_str() {
   return rb_newtree(NULL, NULL, NULL);
 }
 
+DS_EXPORT
 RBTree*
 rb_newtree_ptr() {
   return rb_newtree(NULL,
@@ -111,6 +154,7 @@ rb_newtree_ptr() {
                     ds_print_ptr);
 }
 
+DS_EXPORT
 void
 rb_empty(RBTree *tree) {
   RBNode *node;
@@ -122,11 +166,13 @@ rb_empty(RBTree *tree) {
   tree->root->chld[RB_RIGHT] = tree->nullNode;
 }
 
+DS_EXPORT
 bool
 rb_isempty(RBTree *tree) {
   return tree->root->chld[RB_RIGHT] == tree->nullNode;
 }
 
+DS_EXPORT
 void
 rb_destroy(RBTree *tree) {
   DsAllocator *alc;
@@ -142,6 +188,7 @@ rb_destroy(RBTree *tree) {
   alc->free(tree);
 }
 
+DS_EXPORT
 void
 rb_insert(RBTree *tree,
           void   *key,
@@ -303,6 +350,7 @@ err:
   alc->free(newnode);
 }
 
+DS_EXPORT
 void
 rb_remove(RBTree *tree, void *key) {
   DsAllocator *alc;
@@ -489,7 +537,8 @@ rb_remove(RBTree *tree, void *key) {
   tree->count--;
 }
 
-void *
+DS_EXPORT
+void*
 rb_find(RBTree *tree, void *key) {
   RBNode *found;
   found = rb_find_node(tree, key);
@@ -499,6 +548,7 @@ rb_find(RBTree *tree, void *key) {
   return found->val;
 }
 
+DS_EXPORT
 RBNode*
 rb_find_node(RBTree *tree, void *key) {
   RBNode *iter;
@@ -522,6 +572,7 @@ rb_find_node(RBTree *tree, void *key) {
   return iter;
 }
 
+DS_EXPORT
 int
 rb_parent(RBTree *tree, void *key, RBNode **dest) {
   RBNode *iter, *parent;
@@ -551,15 +602,7 @@ rb_parent(RBTree *tree, void *key, RBNode **dest) {
   return side;
 }
 
-void
-rb_printi(RBTree *tree, RBNode *node) {
-  if(node != tree->nullNode) {
-    rb_printi(tree, node->chld[RB_LEFT]);
-    tree->print(node->key);
-    rb_printi(tree, node->chld[RB_RIGHT]);
-  }
-}
-
+DS_EXPORT
 void
 rb_print(RBTree *tree) {
   printf("Rb Id Dump:\n");
@@ -573,27 +616,7 @@ rb_print(RBTree *tree) {
   printf("------------------------\n");
 }
 
-static
-void
-rb_walki(RBTree * __restrict tree,
-         RBNodeFn            walkFn,
-         RBNode * __restrict node) {
-  if(node == tree->nullNode)
-    return;
-
-  if (node->chld[RB_LEFT] != tree->nullNode)
-    rb_walki(tree,
-             walkFn,
-             node->chld[RB_LEFT]);
-
-  walkFn(tree, node);
-
-  if (node->chld[RB_RIGHT] != tree->nullNode)
-    rb_walki(tree,
-             walkFn,
-             node->chld[RB_RIGHT]);
-}
-
+DS_EXPORT
 void
 rb_walk(RBTree *tree, RBNodeFn walkFn) {
   RBNode *rootNode;
@@ -611,6 +634,7 @@ rb_walk(RBTree *tree, RBNodeFn walkFn) {
  simple assertion for rbtree
  source: Eternally Confuzzled
  */
+DS_EXPORT
 int
 rb_assert(RBTree *tree, RBNode *root) {
   RBNode *ln, *rn;

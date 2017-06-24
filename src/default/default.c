@@ -20,6 +20,7 @@ DsAllocator ds__alc = {
   .strdup   = strdup
 };
 
+DS_HIDE
 DsAllocator*
 ds_def_alc() {
   return &ds__alc;
