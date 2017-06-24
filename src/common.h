@@ -8,5 +8,6 @@
 
 #include "../include/ds/common.h"
 #include "../include/ds/allocator.h"
+#include "../include/ds/util.h"
 
 #endif /* ds_src_common_h */

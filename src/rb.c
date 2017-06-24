@@ -51,34 +51,6 @@ rb_walki(RBTree * __restrict tree,
          RBNode * __restrict node);
 
 static
-int
-rb_def_cmp_str(void * key1, void *key2) {
-  return strcmp((char *)key1, (char *)key2);
-}
-
-static
-int
-rb_def_cmp_ptr(void *key1, void *key2) {
-  if (key1 > key2)
-    return 1;
-  else if (key1 < key2)
-    return -1;
-  return 0;
-}
-
-static
-void
-rb_def_print_str(void *key) {
-  printf("\t'%s'\n", (const char *)key);
-}
-
-static
-void
-rb_def_print_ptr(void *key) {
-  printf("\t'%p'\n", key);
-}
-
-static
 void
 rb_free(RBTree *tree, RBNode *node) {
   if(node != tree->nullNode) {
@@ -94,8 +66,8 @@ rb_free(RBTree *tree, RBNode *node) {
 
 RBTree*
 rb_newtree(DsAllocator *allocator,
-           RBCmpFn      cmp,
-           RBPrintFn    print) {
+           DsCmpFn      cmp,
+           DsPrintFn    print) {
   DsAllocator *alc;
   RBTree      *tree;
   RBNode      *rootNode, *nullNode;
@@ -120,8 +92,8 @@ rb_newtree(DsAllocator *allocator,
   tree->nullNode = nullNode;
 
   tree->alc   = alc;
-  tree->cmp   = cmp   ? cmp   : rb_def_cmp_str;
-  tree->print = print ? print : rb_def_print_str;
+  tree->cmp   = cmp   ? cmp   : ds_cmp_str;
+  tree->print = print ? print : ds_print_str;
   tree->count = 0;
 
   return tree;
@@ -135,8 +107,8 @@ rb_newtree_str() {
 RBTree*
 rb_newtree_ptr() {
   return rb_newtree(NULL,
-                    rb_def_cmp_ptr,
-                    rb_def_print_ptr);
+                    ds_cmp_ptr,
+                    ds_print_ptr);
 }
 
 void

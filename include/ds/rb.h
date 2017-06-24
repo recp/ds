@@ -11,6 +11,7 @@ extern "C" {
 
 #include "common.h"
 #include "allocator.h"
+#include "util.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -19,8 +20,6 @@ extern "C" {
 struct RBTree;
 struct RBNode;
 
-typedef int  (*RBCmpFn)(void *, void *);
-typedef void (*RBPrintFn)(void *);
 typedef void (*RBWalkFn)(struct RBTree *tree, struct RBNode *node);
 typedef void (*RBFoundFn)(struct RBTree *tree, void *key, bool *replace);
 typedef void (*RBFreeFn)(void *);
@@ -36,8 +35,8 @@ typedef struct RBTree {
   DsAllocator *alc;
   RBNode      *root;
   RBNode      *nullNode;
-  RBCmpFn      cmp;
-  RBPrintFn    print;
+  DsCmpFn      cmp;
+  DsPrintFn    print;
   RBWalkFn     freeNode;
   RBFreeFn     freeFn;
   RBFoundFn    foundFn; /* fires for duplicates */
@@ -46,8 +45,8 @@ typedef struct RBTree {
 
 RBTree*
 rb_newtree(DsAllocator *allocator,
-           RBCmpFn      cmp,
-           RBPrintFn    print);
+           DsCmpFn      cmp,
+           DsPrintFn    print);
 
 RBTree*
 rb_newtree_str(void);

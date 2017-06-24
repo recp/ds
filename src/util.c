@@ -45,3 +45,15 @@ ds_cmp_i64(void *key1, void *key2) {
 
   return a - b;
 }
+
+DS_EXPORT
+void
+ds_print_str(void *key) {
+  printf("\t'%s'\n", (const char *)key);
+}
+
+DS_EXPORT
+void
+ds_print_ptr(void *key) {
+  printf("\t'%p'\n", key);
+}
