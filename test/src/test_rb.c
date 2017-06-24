@@ -17,7 +17,7 @@ char *inserted_items[2000];
 
 static
 int
-rb_def_cmp_float(void *key1, void *key2) {
+test_rb_cmp_float(void *key1, void *key2) {
   float key1f, key2f;
 
   key1f = *(float *)key1;
@@ -32,8 +32,22 @@ rb_def_cmp_float(void *key1, void *key2) {
 
 static
 void
-rb_def_print_float(void *key) {
+test_rb_print_float(void *key) {
   printf("\t'%0.8f'\n", *(float *)key);
+}
+
+static
+void
+test_rb_freenode(void *nodep) {
+  RBNode *node;
+  node = nodep;
+
+  assert_non_null(node);
+  assert_non_null(node->val);
+
+  /* free value and node */
+  free(node->val);
+  free(node);
 }
 
 void
@@ -127,8 +141,6 @@ test_rb_topdown_str(void **state) {
 
   /* test removing */
   for (i = 0; i < count * 2; i++) {
-    found = rb_find(tree, inserted_items[i]);
-
     rb_remove(tree, inserted_items[i]);
 
     /* test balance */
@@ -171,6 +183,9 @@ test_rb_topdown_str(void **state) {
   /* we removed all nodes */
   rb_empty(tree);
   assert_true(rb_isempty(tree));
+
+  key = strdup(keybuf);
+  rb_insert(tree, key, key);
 
   rb_print(tree);
   rb_destroy(tree);
@@ -216,6 +231,12 @@ test_rb_topdown_ptr(void **state) {
   /* we removed all nodes */
   rb_empty(tree);
   assert_true(rb_isempty(tree));
+
+  k   =  rand() % 10000;
+  key = (void *)k;
+  rb_insert(tree, key, key);
+
+  rb_print(tree);
   rb_destroy(tree);
 }
 
@@ -228,7 +249,7 @@ test_rb_topdown_custom_cmp(void **state) {
   int       count, i;
 
   count = 1000;
-  tree  = rb_newtree(rb_def_cmp_float, rb_def_print_float);
+  tree  = rb_newtree(test_rb_cmp_float, test_rb_print_float);
 
   srand((unsigned int)time(NULL));
 
@@ -257,6 +278,60 @@ test_rb_topdown_custom_cmp(void **state) {
   /* we removed all nodes */
   rb_empty(tree);
   assert_true(rb_isempty(tree));
+
+  key  = malloc(sizeof(*key));
+  *key = (float)drand48();
+  rb_insert(tree, key, key);
+  rb_print(tree);
+
+  rb_destroy(tree);
+}
+
+void
+test_rb_topdown_freeenode(void **state) {
+  RBTree   *tree;
+  RBNode   *node;
+  float    *key;
+  void     *found;
+  int       count, i;
+
+  count = 1000;
+  tree  = rb_newtree(test_rb_cmp_float, test_rb_print_float);
+  tree->freeFn = test_rb_freenode;
+
+  srand((unsigned int)time(NULL));
+
+  /* make sure it is samll size: max 32 */
+  for (i = 0; i < count; i++) {
+    key  = malloc(sizeof(*key));
+    *key = (float)drand48();
+
+    rb_insert(tree, key, key);
+
+    /* test balance */
+    assert(rb_assert(tree, tree->root->chld[1]));
+
+    /* test find node */
+    node = rb_find_node(tree, key);
+    assert_non_null(node);
+
+    /* test find value */
+    found = rb_find(tree, key);
+    assert_non_null(node);
+
+    /* found values must be same */
+    assert_ptr_equal(node->val, found);
+  }
+
+  /* we removed all nodes */
+  rb_empty(tree);
+  assert_true(rb_isempty(tree));
+
+  key  = malloc(sizeof(*key));
+  *key = (float)drand48();
+  rb_insert(tree, key, key);
+  rb_print(tree);
+
   rb_destroy(tree);
 }
 
@@ -265,7 +340,8 @@ main(int argc, const char * argv[]) {
   const struct CMUnitTest tests[] = {
     cmocka_unit_test(test_rb_topdown_str),
     cmocka_unit_test(test_rb_topdown_ptr),
-    cmocka_unit_test(test_rb_topdown_custom_cmp)
+    cmocka_unit_test(test_rb_topdown_custom_cmp),
+    cmocka_unit_test(test_rb_topdown_freeenode)
   };
 
   return cmocka_run_group_tests(tests,
