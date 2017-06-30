@@ -9,6 +9,6 @@
 #include "../common.h"
 
 DsAllocator*
-ds_def_alc();
+ds_def_alc(void);
 
 #endif /* ds_default_h */

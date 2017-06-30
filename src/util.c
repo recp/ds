@@ -37,7 +37,7 @@ ds_cmp_i32(void *key1, void *key2) {
 }
 
 DS_EXPORT
-int
+int64_t
 ds_cmp_i64(void *key1, void *key2) {
   int64_t a, b;
 

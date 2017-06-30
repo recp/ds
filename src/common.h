@@ -10,4 +10,11 @@
 #include "../include/ds/allocator.h"
 #include "../include/ds/util.h"
 
+#include "default/default.h"
+
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdio.h>
+
 #endif /* ds_src_common_h */

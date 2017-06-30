@@ -4,26 +4,31 @@
  */
 
 /*
- Functions in this header:
+ Types:
+   struct RBTree;
+   struct RBNode;
+   typedef void (*RBNodeFn)(RBTree *tree, RBNode *node);
+   typedef void (*RBFoundFn)(RBTree *tree, void *key, bool *replace);
 
- RBTree* rb_newtree(DsAllocator *allocator, DsCmpFn cmp, DsPrintFn print);
- RBTree* rb_newtree_str(void);
- RBTree* rb_newtree_ptr(void);
- void    rb_insert(RBTree *tree, void *key, void *val);
- void    rb_remove(RBTree *tree, void *key);
- void*   rb_find(RBTree *tree, void *key);
- RBNode* rb_find_node(RBTree *tree, void *key);
- int     rb_parent(RBTree *tree, void *key, RBNode ** dest);
- void    rb_print(RBTree *tree);
- void    rb_walk(RBTree *tree, RBNodeFn walkFn);
- int     rb_assert(RBTree *tree, RBNode *root);
- void    rb_empty(RBTree *tree);
- bool    rb_isempty(RBTree *tree);
- void    rb_destroy(RBTree *tree);
+ Functions:
+   RBTree* rb_newtree(DsAllocator *allocator, DsCmpFn cmp, DsPrintFn print);
+   RBTree* rb_newtree_str(void);
+   RBTree* rb_newtree_ptr(void);
+   void    rb_insert(RBTree *tree, void *key, void *val);
+   void    rb_remove(RBTree *tree, void *key);
+   void*   rb_find(RBTree *tree, void *key);
+   RBNode* rb_find_node(RBTree *tree, void *key);
+   int     rb_parent(RBTree *tree, void *key, RBNode ** dest);
+   void    rb_print(RBTree *tree);
+   void    rb_walk(RBTree *tree, RBNodeFn walkFn);
+   int     rb_assert(RBTree *tree, RBNode *root);
+   void    rb_empty(RBTree *tree);
+   bool    rb_isempty(RBTree *tree);
+   void    rb_destroy(RBTree *tree);
  */
 
-#ifndef redblack_h
-#define redblack_h
+#ifndef ds_redblack_h
+#define ds_redblack_h
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -68,6 +73,8 @@ typedef struct RBTree {
  * @param[in]  cmp    custom comparer, check util.h to pick pre-existed one
  *             if you don't need to specific comparer. or NULL for default (str)
  * @param[in]  print  custom allocator or NULL for default (str)
+ *
+ * @return new tree
  */
 DS_EXPORT
 RBTree*
@@ -79,6 +86,8 @@ rb_newtree(DsAllocator *allocator,
  * @brief pre-defined ctor, it is same with these:
  *        rb_newtree(NULL, NULL, NULL)
  *        rb_newtree(NULL, ds_cmp_str, ds_print_str)
+ *
+ * @return new tree
  */
 DS_EXPORT
 RBTree*
@@ -87,6 +96,8 @@ rb_newtree_str(void);
 /*!
  * @brief pre-defined ctor, it is same with:
  *        rb_newtree(NULL, ds_cmp_ptr, ds_print_ptr)
+ *
+ * @return new tree
  */
 DS_EXPORT
 RBTree*
@@ -95,8 +106,9 @@ rb_newtree_ptr(void);
 /*!
  * @brief inserts new node by specified key
  *
- * @param[in]  a    source
- * @param[out] dest destination
+ * @param[in]  tree tree
+ * @param[in]  key  key
+ * @param[in]  val  value
  */
 DS_EXPORT
 void
@@ -121,6 +133,8 @@ rb_remove(RBTree *tree,
  *
  * @param[in] tree rbtree
  * @param[in] key  key
+ *
+ * @return found value or NULL
  */
 DS_EXPORT
 void*
@@ -132,6 +146,8 @@ rb_find(RBTree *tree,
  *
  * @param[in] tree rbtree
  * @param[in] key  key
+ *
+ * @return found RBNode or NULL
  */
 DS_EXPORT
 RBNode*
@@ -206,7 +222,9 @@ rb_empty(RBTree *tree);
 /*!
  * @brief return true if rbtree is empty
  *
- * @param[in]  tree
+ * @param[in]  tree tree
+ *
+ * @return is empty or not
  */
 DS_EXPORT
 bool
@@ -216,7 +234,7 @@ rb_isempty(RBTree *tree);
  * @brief releases all nodes and tree, you cannot use tree after destroying it.
  *        to use tree again you must re-alloc tree
  *
- * @param[in]  tree
+ * @param[in]  tree tree
  */
 DS_EXPORT
 void
@@ -225,4 +243,4 @@ rb_destroy(RBTree *tree);
 #ifdef __cplusplus
 }
 #endif
-#endif /* redblack_h */
+#endif /* ds_redblack_h */
