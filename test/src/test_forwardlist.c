@@ -85,6 +85,28 @@ test_flist(void **state) {
       assert_false(flist_contains(flist, val));
     }
 
+    /* pick random item */
+    if (i == 40) {
+      FListItem *item1, *item2;
+      float     *val1,  *val2;
+      int        i;
+
+      item1 = flist->first;
+      for (i = 0; i < 5; i++) {
+        item1 = item1->next;
+      }
+
+      item2 = item1->next->next;
+
+      val1  = item1->data;
+      val2  = item2->data;
+      flist_remove(flist, item1);
+      flist_remove(flist, item2);
+
+      assert_false(flist_contains(flist, val1));
+      assert_false(flist_contains(flist, val2));
+    }
+
     /* test empty */
     if (i == 100) {
       flist_empty(flist);
