@@ -280,6 +280,104 @@ test_rb_topdown_custom_cmp(void **state) {
 }
 
 void
+test_rb_topdown_custom_cmp_i32(void **state) {
+  RBTree   *tree;
+  RBNode   *node;
+  int32_t  *key;
+  void     *found;
+  int       count, i;
+
+  count = 1000;
+  tree  = rb_newtree(NULL,
+                     ds_cmp_i32,
+                     ds_print_i32);
+
+  srand((unsigned int)time(NULL));
+
+  /* make sure it is samll size: max 32 */
+  for (i = 0; i < count; i++) {
+    key  = malloc(sizeof(*key));
+    *key = rand() % 10000;
+
+    rb_insert(tree, key, key);
+
+    /* test balance */
+    assert(rb_assert(tree, tree->root->chld[1]));
+
+    /* test find node */
+    node = rb_find_node(tree, key);
+    assert_non_null(node);
+
+    /* test find value */
+    found = rb_find(tree, key);
+    assert_non_null(node);
+
+    /* found values must be same */
+    assert_ptr_equal(node->val, found);
+  }
+
+  /* we removed all nodes */
+  rb_empty(tree);
+  assert_true(rb_isempty(tree));
+
+  key  = malloc(sizeof(*key));
+  *key = rand() % 10000;
+  rb_insert(tree, key, key);
+  rb_print(tree);
+
+  rb_destroy(tree);
+}
+
+void
+test_rb_topdown_custom_cmp_i64(void **state) {
+  RBTree   *tree;
+  RBNode   *node;
+  int64_t  *key;
+  void     *found;
+  int       count, i;
+
+  count = 1000;
+  tree  = rb_newtree(NULL,
+                     ds_cmp_i64,
+                     ds_print_i64);
+
+  srand((unsigned int)time(NULL));
+
+  /* make sure it is samll size: max 32 */
+  for (i = 0; i < count; i++) {
+    key  = malloc(sizeof(*key));
+    *key = rand() % 10000;
+
+    rb_insert(tree, key, key);
+
+    /* test balance */
+    assert(rb_assert(tree, tree->root->chld[1]));
+
+    /* test find node */
+    node = rb_find_node(tree, key);
+    assert_non_null(node);
+
+    /* test find value */
+    found = rb_find(tree, key);
+    assert_non_null(node);
+
+    /* found values must be same */
+    assert_ptr_equal(node->val, found);
+  }
+
+  /* we removed all nodes */
+  rb_empty(tree);
+  assert_true(rb_isempty(tree));
+
+  key  = malloc(sizeof(*key));
+  *key = rand() % 10000;
+  rb_insert(tree, key, key);
+  rb_print(tree);
+
+  rb_destroy(tree);
+}
+
+void
 test_rb_topdown_freeenode(void **state) {
   RBTree   *tree;
   RBNode   *node;

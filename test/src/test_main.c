@@ -13,6 +13,8 @@ main(int argc, const char * argv[]) {
     cmocka_unit_test(test_rb_topdown_ptr),
     cmocka_unit_test(test_rb_topdown_custom_cmp),
     cmocka_unit_test(test_rb_topdown_freeenode),
+    cmocka_unit_test(test_rb_topdown_custom_cmp_i32),
+    cmocka_unit_test(test_rb_topdown_custom_cmp_i64),
 
     cmocka_unit_test(test_flist)
   };

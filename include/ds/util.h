@@ -28,7 +28,7 @@ int
 ds_cmp_i32(void *key1, void *key2);
 
 DS_EXPORT
-int64_t
+int
 ds_cmp_i64(void *key1, void *key2);
 
 DS_EXPORT
@@ -38,6 +38,14 @@ ds_print_str(void *key);
 DS_EXPORT
 void
 ds_print_ptr(void *key);
+
+DS_EXPORT
+void
+ds_print_i32(void *key);
+
+DS_EXPORT
+void
+ds_print_i64(void *key);
 
 #ifdef __cplusplus
 }
