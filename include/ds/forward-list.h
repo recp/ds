@@ -15,6 +15,9 @@
     FList* flist_append(FList *flist, void  *value);
     void   flist_remove(FList *flist, FListItem *item);
     void   flist_remove_by(FList *flist, void *value);
+    bool   flist_contains(FList *flist, void *value);
+    void   flist_empty(FList *flist);
+    bool   flist_isempty(FList *flist);
     void   flist_destroy(FList *flist);
   */
 
