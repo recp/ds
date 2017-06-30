@@ -1,16 +1,10 @@
 /*
  * Copyright (c), Recep Aslantas.
- *
  * MIT License (MIT), http://opensource.org/licenses/MIT
- * Full license can be found in the LICENSE file
  */
 
 #include "test_common.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
-#include <float.h>
+#include <ds/rb.h>
 
 /* keep top 2000 to test remove */
 char *inserted_items[2000];
@@ -42,7 +36,7 @@ test_rb_freenode(RBTree *tree, RBNode *node) {
   assert_non_null(node);
   assert_non_null(node->val);
 
-  /* free value and node */
+  /* free value */
   free(node->val);
 }
 
@@ -333,18 +327,4 @@ test_rb_topdown_freeenode(void **state) {
   rb_print(tree);
 
   rb_destroy(tree);
-}
-
-int
-main(int argc, const char * argv[]) {
-  const struct CMUnitTest tests[] = {
-    cmocka_unit_test(test_rb_topdown_str),
-    cmocka_unit_test(test_rb_topdown_ptr),
-    cmocka_unit_test(test_rb_topdown_custom_cmp),
-    cmocka_unit_test(test_rb_topdown_freeenode)
-  };
-
-  return cmocka_run_group_tests(tests,
-                                NULL,
-                                NULL);
 }

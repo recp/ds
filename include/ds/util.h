@@ -9,6 +9,9 @@
 extern "C" {
 #endif
 
+#include "common.h"
+#include <stdint.h>
+
 typedef int  (*DsCmpFn)(void *, void *);
 typedef void (*DsPrintFn)(void *);
 

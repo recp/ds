@@ -36,16 +36,20 @@ dsdir=$(includedir)/ds
 ds_HEADERS = include/ds/rb.h \
              include/ds/util.h \
              include/ds/common.h \
-             include/ds/allocator.h
+             include/ds/allocator.h \
+             include/ds/forward-list.h
 
 libds_la_SOURCES=\
     src/rb.c \
+    src/forwardlist.c \
     src/util.c \
     src/default/default.c
 
 test_tests_SOURCES=\
+    test/src/test_common.c \
+    test/src/test_main.c \
     test/src/test_rb.c \
-    test/src/test_common.c
+    test/src/test_forwardlist.c
 
 all-local:
 	sh ./post-build.sh

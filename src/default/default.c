@@ -15,8 +15,10 @@ DsAllocator ds__alc = {
   .free     = free,
 #ifndef _WIN32
   .memalign = posix_memalign,
-#endif
   .strdup   = strdup
+#else
+  .strdup   = _strdup
+#endif
 };
 
 DS_HIDE

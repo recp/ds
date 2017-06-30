@@ -1,8 +1,6 @@
 /*
  * Copyright (c), Recep Aslantas.
- *
  * MIT License (MIT), http://opensource.org/licenses/MIT
- * Full license can be found in the LICENSE file
  */
 
 #ifndef test_common_h
@@ -15,7 +13,11 @@
 #include <cmocka.h>
 #include <time.h>
 
-#include <ds/rb.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+#include <float.h>
 
 void
 rand_str(char *dest, size_t length);

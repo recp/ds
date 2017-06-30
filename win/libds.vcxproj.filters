@@ -22,6 +22,12 @@
     <Filter Include="src\default">
       <UniqueIdentifier>{dedec597-3ca0-4b0f-900f-a8c36e5c496f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{e6835f4f-a755-49af-b58e-ca68f451277e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\src">
+      <UniqueIdentifier>{b9f8b30a-6091-4fb0-96e2-52029459d024}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\ds\rb.h">
@@ -42,6 +48,12 @@
     <ClInclude Include="..\src\common.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ds\forward-list.h">
+      <Filter>include\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ds\hashtable.h">
+      <Filter>include\ds</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\rb.c">
@@ -51,6 +63,9 @@
       <Filter>src\default</Filter>
     </ClCompile>
     <ClCompile Include="..\src\util.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\forwardlist.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
