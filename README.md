@@ -20,6 +20,7 @@ I think `ds` namespace is very good choice, we can use it like this:
 
 # Todo
 - [x] rbtree (top-down)
+- [x] forward-list
 - [ ] hashtable
 - [ ] octree
 - [ ] quadtree

@@ -58,9 +58,31 @@ test_flist(void **state) {
     /* test remove by item */
     if (i == 10) {
       FListItem *item;
+      float     *val;
+
       item = flist->first;
+      val  = item->data;
       flist_remove(flist, item);
-      assert_false(flist_contains(flist, value));
+      assert_false(flist_contains(flist, val));
+    }
+
+    if (i == 20 && flist->last) {
+      FListItem *item;
+      float     *val;
+
+      item = flist->last;
+      val  = item->data;
+      flist_remove(flist, item);
+      if (flist->first)
+        assert_non_null(flist->last);
+      assert_false(flist_contains(flist, val));
+    }
+
+    if (i == 30) {
+      void *val;
+      val = flist->last->data;
+      flist_remove_by(flist, val);
+      assert_false(flist_contains(flist, val));
     }
 
     /* test empty */

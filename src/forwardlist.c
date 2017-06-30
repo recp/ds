@@ -8,6 +8,11 @@
 
 #include <assert.h>
 
+void
+flist_perform_remove(FList *flist,
+                     FListItem *prev,
+                     FListItem *item);
+
 DS_EXPORT
 FList*
 flist_new(DsAllocator *allocator) {
@@ -35,8 +40,12 @@ flist_insert(FList *flist,
   item->data = value;
 
   item->next = flist->first;
-  if (!flist->last)
+  if (!flist->last) {
+#if DEBUG
+    assert(!flist->first && flist->count == 0);
+#endif
     flist->last = item;
+  }
 
   flist->first = item;
   flist->count++;
@@ -50,15 +59,66 @@ flist_append(FList *flist,
 
   item = flist->alc->calloc(sizeof(*item), 1);
   item->data = value;
+  item->next = NULL; /* we are appending it */
 
-  if (flist->last)
+  if (flist->last) {
+#if DEBUG
+    assert(flist->first && flist->count > 0);
+#endif
     flist->last->next = item;
+  }
 
-  if (!flist->first)
+  /* if last == NULL then first == NULL too */
+  else {
+#if DEBUG
+    assert(!flist->first && flist->count == 0);
+#endif
     flist->first = item;
+  }
 
   flist->last = item;
   flist->count++;
+}
+
+void
+flist_perform_rm(FList     *flist,
+                 FListItem *prev,
+                 FListItem *tofree) {
+  /* fire events */
+  if (flist->onFreeItem)
+    flist->onFreeItem(flist, tofree);
+
+  /* special case; ingle item */
+  if (flist->first == tofree
+      && flist->last == tofree) {
+    flist->first = flist->last = NULL;
+#if DEBUG
+    assert(flist->count == 1);
+#endif
+    flist->count = 0;
+    flist->alc->free(tofree);
+    return;
+  }
+
+  if (flist->first == tofree) {
+    flist->first = tofree->next;
+#if DEBUG
+    assert(flist->first);
+#endif
+  }
+
+  if (flist->last == tofree) {
+    flist->last = prev;
+#if DEBUG
+    assert(flist->last);
+#endif
+  }
+
+  if (prev->next == tofree)
+    prev->next = tofree->next;
+
+  flist->alc->free(tofree);
+  flist->count--;
 }
 
 DS_EXPORT
@@ -69,11 +129,15 @@ flist_remove(FList *flist, FListItem *item) {
 
   alc  = flist->alc;
   prev = flist->first;
+  if (prev == item) {
+    tofree = prev;
+    goto freeitm;
+  }
 
   tofree = NULL;
-  while (prev) {
-    if (prev == item) {
-      tofree = prev;
+  while (prev->next) {
+    if (prev->next == item) {
+      tofree = prev->next;
       break;
     }
     prev = prev->next;
@@ -82,20 +146,8 @@ flist_remove(FList *flist, FListItem *item) {
   if (!tofree)
     return;
 
-  if (flist->onFreeItem)
-    flist->onFreeItem(flist, tofree);
-
-  if (flist->first == tofree)
-    flist->first = tofree->next;
-
-  if (flist->last == tofree)
-    flist->last = tofree->next;
-
-  if (prev->next == tofree)
-    prev->next = tofree->next;
-
-  alc->free(tofree);
-  flist->count--;
+freeitm:
+  flist_perform_rm(flist, prev, tofree);
 }
 
 DS_EXPORT
@@ -106,11 +158,15 @@ flist_remove_by(FList *flist, void *value) {
 
   alc  = flist->alc;
   prev = flist->first;
+  if (prev && prev->data == value) {
+    tofree = prev;
+    goto freeitm;
+  }
 
   tofree = NULL;
-  while (prev) {
-    if (prev->data == value) {
-      tofree = prev;
+  while (prev->next) {
+    if (prev->next->data == value) {
+      tofree = prev->next;
       break;
     }
     prev = prev->next;
@@ -119,20 +175,8 @@ flist_remove_by(FList *flist, void *value) {
   if (!tofree)
     return;
 
-  if (flist->onFreeItem)
-    flist->onFreeItem(flist, tofree);
-
-  if (flist->first == tofree)
-    flist->first = tofree->next;
-
-  if (flist->last == tofree)
-    flist->last = tofree->next;
-
-  if (prev->next == tofree)
-    prev->next = tofree->next;
-
-  alc->free(tofree);
-  flist->count--;
+freeitm:
+  flist_perform_rm(flist, prev, tofree);
 }
 
 DS_EXPORT
