@@ -124,11 +124,12 @@ flist_perform_rm(FList     *flist,
 DS_EXPORT
 void
 flist_remove(FList *flist, FListItem *item) {
-  DsAllocator *alc;
-  FListItem   *prev, *tofree;
+  FListItem *prev, *tofree;
 
-  alc  = flist->alc;
   prev = flist->first;
+  if (!prev)
+    return;
+
   if (prev == item) {
     tofree = prev;
     goto freeitm;
@@ -153,11 +154,12 @@ freeitm:
 DS_EXPORT
 void
 flist_remove_by(FList *flist, void *value) {
-  DsAllocator *alc;
-  FListItem   *prev, *tofree;
+  FListItem *prev, *tofree;
 
-  alc  = flist->alc;
   prev = flist->first;
+  if (!prev)
+    return;
+
   if (prev && prev->data == value) {
     tofree = prev;
     goto freeitm;
