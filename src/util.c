@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 DS_EXPORT
 int
@@ -69,4 +70,19 @@ DS_EXPORT
 void
 ds_print_i64(void *key) {
   printf("\t%llu\n", *(int64_t *)key);
+}
+
+DS_EXPORT
+int32_t
+ds_prime_num(int32_t min) {
+  int32_t i;
+
+  /* find closest prime */
+again:
+  for(min++, i = 2; i <= min / 2; ++i) {
+    if(min % i == 0)
+      goto again;
+  }
+
+  return min;
 }

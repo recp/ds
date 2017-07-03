@@ -47,6 +47,10 @@ DS_EXPORT
 void
 ds_print_i64(void *key);
 
+DS_EXPORT
+int32_t
+ds_prime_num(int32_t min);
+
 #ifdef __cplusplus
 }
 #endif
