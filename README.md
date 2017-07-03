@@ -14,22 +14,18 @@ now it is better to separate common data structures as external library
 I think `ds` namespace is very good choice, we can use it like this:
 ```C
 #include <ds/rb.h>
-#include <ds/hashtable.h>
+#include <ds/hash.h>
 #include <ds/octree.h>
 ```
 
-# Todo
-- [x] rbtree (top-down)
+## Todo
+- [x] rbtree (top-down insertion, top-down deletion)
 - [x] forward-list
-- [x] hashtable
+- [x] hash-table
+   - [x] builtin hash functions e.g. djb2
+   - [ ] resizing hash table
 - [ ] octree
 - [ ] quadtree
-
-# Build
-todo
-
-# License
-MIT. check the LICENSE file
 
 ## Build
 
@@ -58,3 +54,6 @@ if `msbuild` won't work (because of multi version VS) then try to build with `de
 ```Powershell
 $ devenv libds.sln /Build Release
 ```
+
+## License
+MIT. check the LICENSE file
