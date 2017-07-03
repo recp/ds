@@ -54,6 +54,12 @@
     <ClInclude Include="..\include\ds\hashtable.h">
       <Filter>include\ds</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ds\hash.h">
+      <Filter>include\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ds\hash-funcs.h">
+      <Filter>include\ds</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\rb.c">
@@ -65,7 +71,13 @@
     <ClCompile Include="..\src\util.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\forwardlist.c">
+    <ClCompile Include="..\src\forward_list.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\hash_funcs.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\hash_table.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

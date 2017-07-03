@@ -7,7 +7,7 @@
 #include <ds/rb.h>
 
 /* keep top 2000 to test remove */
-char *inserted_items[2000];
+static char *inserted_items[2000];
 
 static
 int
