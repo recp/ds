@@ -19,17 +19,38 @@ test_htable(void **state) {
   uint32_t count, i, k;
   uint32_t capacity;
 
-  capacity = ds_prime_num(25);
+  capacity = ds_prime_num(3);
   htable   = hash_new_str(capacity);
 
   /* 25 is not a prime number */
-  assert_true(htable->capacity > 25);
+  assert_true(htable->capacity > 3);
 
   count = 1000;
 
   srand((unsigned int)time(NULL));
 
-  /* make sure it is samll size: max 32 */
+  for (i = 0; i < 2; i++) {
+    /* random key length */
+    k = rand() % (sizeof(keybuf) / 8 - 1);
+
+    rand_str(keybuf, k);
+    key = strdup(keybuf);
+
+    hash_set(htable, key, key);
+
+    /* test find value */
+    found = hash_get(htable, key);
+    assert_non_null(found);
+
+    /* found values must be same */
+    assert_ptr_equal(key, found);
+    inserted_items[i] = key;
+  }
+
+  /* increase size */
+  hash_resize(htable, 9);
+  assert_true(htable->count == 2);
+
   for (i = 0; i < count; i++) {
     /* random key length */
     k = rand() % (sizeof(keybuf) / 8 - 1);
@@ -47,8 +68,23 @@ test_htable(void **state) {
     assert_ptr_equal(key, found);
     inserted_items[i] = key;
 
-    if (i == 10 || i == 50) {
+    if (i == 0 || i == 10 || i == 50) {
       hash_unset(htable, key);
+
+      /* try to unset again */
+      hash_unset(htable, key);
+
+      found = hash_get(htable, key);
+      assert_null(found);
+
+      /* allow only once */
+      hash_set(htable, key, key);
+      hash_set(htable, key, key);
+      hash_set(htable, key, key);
+
+      /* test remove by NULL */
+      hash_set(htable, key, NULL);
+
       found = hash_get(htable, key);
       assert_null(found);
     }
@@ -66,7 +102,6 @@ test_htable(void **state) {
   hash_resize(htable, 15);
   assert_true(htable->count == count);
 
-  /* some extra test after resizing table */
   for (i = 0; i < 10; i++) {
     /* random key length */
     k = rand() % (sizeof(keybuf) / 8 - 1);

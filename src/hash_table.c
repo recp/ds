@@ -120,7 +120,7 @@ hash_insert(HTable     *htable,
     return;
   }
 
-  if (!found) {
+  if (!prev) {
     item->next         = htable->table[idx];
     htable->table[idx] = item;
   }
@@ -128,7 +128,8 @@ hash_insert(HTable     *htable,
   /* there is no need to access array (read + write),
    just append it */
   else {
-    found->next = item;
+    prev->next = item;
+    item->next = NULL;
   }
 
   htable->count++;
@@ -148,6 +149,7 @@ hash_set(HTable *htable,
   }
 
   if (hash_finditem(htable, key, &idx, &found, &prev)) {
+    found->key  = key;
     found->data = value;
     return;
   }
@@ -156,7 +158,7 @@ hash_set(HTable *htable,
   item->key          = key;
   item->data         = value;
 
-  if (!found) {
+  if (!prev) {
     item->next         = htable->table[idx];
     htable->table[idx] = item;
   }
@@ -164,7 +166,7 @@ hash_set(HTable *htable,
   /* there is no need to access array (read + write),
      just append it */
   else {
-    found->next = item;
+    prev->next = item;
   }
 
   htable->count++;

@@ -19,11 +19,13 @@ I think `ds` namespace is very good choice, we can use it like this:
 ```
 
 ## Todo
-- [x] rbtree (top-down insertion, top-down deletion)
+- [x] rbtree
+   - [x] top-down insertion
+   - [x] top-down deletion
 - [x] forward-list
 - [x] hash-table
    - [x] builtin hash functions e.g. djb2
-   - [ ] resizing hash table
+   - [x] resizing hash table
 - [ ] octree
 - [ ] quadtree
 
