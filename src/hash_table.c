@@ -17,6 +17,11 @@ hash_finditem(HTable      *htable,
               HTableItem **found,
               HTableItem **prev);
 
+static
+void
+hash_insert(HTable     *htable,
+            HTableItem *item);
+
 DS_EXPORT
 HTable*
 hash_new(DsAllocator *allocator,
@@ -26,9 +31,10 @@ hash_new(DsAllocator *allocator,
   DsAllocator *alc;
   HTable   *htable;
 
-  alc   = !allocator ? ds_def_alc() : allocator;
-  htable = alc->calloc(sizeof(*htable), 1);
+  alc      = !allocator ? ds_def_alc() : allocator;
+  htable   = alc->calloc(sizeof(*htable), 1);
 
+  capacity = (uint32_t)ds_prime_num(capacity);
   htable->table = alc->calloc(sizeof(*htable->table), capacity);
 
   assert(htable);
@@ -100,13 +106,41 @@ hash_unset(HTable *htable,
   htable->count--;
 }
 
+static
+void
+hash_insert(HTable     *htable,
+            HTableItem *item) {
+  HTableItem *prev, *found;
+  uint32_t    idx;
+
+  /* replace */
+  if (hash_finditem(htable, item->key, &idx, &found, &prev)) {
+    hash_unset(htable, item->key);
+    hash_insert(htable, item);
+    return;
+  }
+
+  if (!found) {
+    item->next         = htable->table[idx];
+    htable->table[idx] = item;
+  }
+
+  /* there is no need to access array (read + write),
+   just append it */
+  else {
+    found->next = item;
+  }
+
+  htable->count++;
+}
+
 DS_EXPORT
 void
 hash_set(HTable *htable,
          void   *key,
          void   *value) {
   HTableItem *prev, *found, *item;
-  uint32_t       idx;
+  uint32_t    idx;
 
   if (!value) {
     hash_unset(htable, key);
@@ -141,10 +175,67 @@ void*
 hash_get(HTable *htable,
          void   *key) {
   HTableItem *prev, *found;
-  uint32_t       idx;
+  uint32_t    idx;
 
   if (!hash_finditem(htable, key, &idx, &found, &prev) || !found)
     return NULL;
 
   return found->data;
+}
+
+DS_EXPORT
+void
+hash_resize(HTable  *htable,
+            uint32_t capacity) {
+  DsAllocator *alc;
+  HTableItem **table;
+  HTableItem  *first, *last,  *item;
+  uint32_t     i;
+
+  capacity = (uint32_t)ds_prime_num(capacity);
+  if (htable->capacity == capacity)
+    return;
+
+  first = NULL;
+  table = htable->table;
+
+  /* create linear list */
+  for (i = 0; i < htable->capacity; i++) {
+    if (!(item = table[i]))
+      continue;
+
+    last = item;
+    while (last->next)
+      last = last->next;
+
+    last->next = first;
+    first      = item;
+  }
+
+  alc = htable->alc;
+
+  /* free / malloc */
+  if (capacity > htable->capacity) {
+    alc->free(table);
+    table = alc->calloc(sizeof(*table), capacity);
+  }
+
+  /* realloc must be faster than free/malloc here */
+  else {
+    size_t newsize;
+    newsize = sizeof(*table) * capacity;
+    table   = alc->realloc(table, newsize);
+    memset(table, '\0', newsize);
+  }
+
+  htable->table    = table;
+  htable->count    = 0;
+  htable->capacity = capacity;
+
+  /* re-insert all items to resized table */
+  while (first) {
+    item  = first;
+    first = first->next;
+    hash_insert(htable, item);
+  }
 }

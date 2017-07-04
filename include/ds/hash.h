@@ -58,6 +58,11 @@ void*
 hash_get(HTable *htable,
          void   *key);
 
+DS_EXPORT
+void
+hash_resize(HTable  *htable,
+            uint32_t capacity);
+
 #ifdef __cplusplus
 }
 #endif
