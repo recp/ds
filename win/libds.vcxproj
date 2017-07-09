@@ -176,6 +176,7 @@
     <ClInclude Include="..\src\default\default.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\allocator.c" />
     <ClCompile Include="..\src\default\default.c" />
     <ClCompile Include="..\src\forward_list.c" />
     <ClCompile Include="..\src\hash_funcs.c" />

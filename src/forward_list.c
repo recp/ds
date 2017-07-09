@@ -19,7 +19,7 @@ flist_new(DsAllocator *allocator) {
   DsAllocator *alc;
   FList       *flist;
 
-  alc   = !allocator ? ds_def_alc() : allocator;
+  alc   = !allocator ? ds_allocator() : allocator;
   flist = alc->calloc(sizeof(*flist), 1);
 
   assert(flist);

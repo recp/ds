@@ -43,6 +43,7 @@ ds_HEADERS = include/ds/rb.h \
 
 libds_la_SOURCES=\
     src/default/default.c \
+    src/allocator.c \
     src/util.c \
     src/rb.c \
     src/forward_list.c \

@@ -114,7 +114,7 @@ rb_newtree(DsAllocator *allocator,
   RBTree      *tree;
   RBNode      *rootNode, *nullNode;
 
-  alc      = !allocator ? ds_def_alc() : allocator;
+  alc      = !allocator ? ds_allocator() : allocator;
 
   tree     = alc->calloc(sizeof(*tree), 1);
   rootNode = alc->calloc(sizeof(*rootNode), 1);

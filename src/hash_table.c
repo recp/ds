@@ -31,7 +31,7 @@ hash_new(DsAllocator *allocator,
   DsAllocator *alc;
   HTable   *htable;
 
-  alc      = !allocator ? ds_def_alc() : allocator;
+  alc      = !allocator ? ds_allocator() : allocator;
   htable   = alc->calloc(sizeof(*htable), 1);
 
   capacity = (uint32_t)ds_prime_num(capacity);
@@ -51,7 +51,7 @@ hash_new(DsAllocator *allocator,
 DS_EXPORT
 HTable*
 hash_new_str(uint32_t capacity) {
-  return hash_new(ds_def_alc(),
+  return hash_new(ds_allocator(),
                   ds_hashfn_djb2,
                   ds_cmp_str,
                   capacity);

@@ -5,6 +5,9 @@
 
 #ifndef ds_allocator_h
 #define ds_allocator_h
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "common.h"
 #include <stdlib.h>
@@ -19,4 +22,15 @@ typedef struct DsAllocator {
   size_t   (*size)(const void *);
 } DsAllocator;
 
+DS_EXPORT
+void
+ds_set_allocator(DsAllocator *alc);
+
+DS_EXPORT
+DsAllocator*
+ds_allocator(void);
+
+#ifdef __cplusplus
+}
+#endif
 #endif /* ds_allocator_h */
