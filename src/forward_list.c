@@ -160,7 +160,7 @@ flist_remove_by(FList *flist, void *value) {
   if (!prev)
     return;
 
-  if (prev && prev->data == value) {
+  if (prev->data == value) {
     tofree = prev;
     goto freeitm;
   }

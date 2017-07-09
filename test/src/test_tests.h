@@ -16,6 +16,7 @@ void test_rb_topdown_custom_cmp_i64(void **state);
 
 /* Forward List*/
 void test_flist(void **state);
+void test_flist_sep(void **state);
 
 /* hash table */
 void test_htable(void **state);

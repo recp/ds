@@ -19,6 +19,7 @@ main(int argc, const char * argv[]) {
 
     /* forward list */
     cmocka_unit_test(test_flist),
+    cmocka_unit_test(test_flist_sep),
 
     /* hash table */
     cmocka_unit_test(test_htable)

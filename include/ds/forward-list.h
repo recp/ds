@@ -5,7 +5,6 @@
 
  /*
   Types:
-    struct FListItem;
     struct FList;
     typedef void (*FListItemFn)(FList *flist, FListItem *item);
 
@@ -30,6 +29,7 @@ extern "C" {
 #include "common.h"
 #include "allocator.h"
 #include "util.h"
+#include "forward-list-common.h"
 
 #include <stdbool.h>
 
@@ -37,11 +37,6 @@ struct FListItem;
 struct FList;
 
 typedef void (*FListItemFn)(struct FList *flist, struct FListItem *item);
-
-typedef struct FListItem {
-  struct FListItem *next;
-  void             *data;
-} FListItem;
 
 typedef struct FList {
   FListItem   *first;
