@@ -29,6 +29,10 @@ ds_cmp_i32(void *key1, void *key2);
 
 DS_EXPORT
 int
+ds_cmp_i32p(void *key1, void *key2);
+
+DS_EXPORT
+int
 ds_cmp_i64(void *key1, void *key2);
 
 DS_EXPORT

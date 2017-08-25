@@ -39,6 +39,17 @@ ds_cmp_i32(void *key1, void *key2) {
 
 DS_EXPORT
 int
+ds_cmp_i32p(void *key1, void *key2) {
+  int32_t a, b;
+
+  a = (int32_t)key1;
+  b = (int32_t)key2;
+
+  return a - b;
+}
+
+DS_EXPORT
+int
 ds_cmp_i64(void *key1, void *key2) {
   int64_t a, b;
 
