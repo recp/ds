@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "../include/ds/forward-list.h"
+#include "../include/ds/forward-list-sep.h"
 
 #include <assert.h>
 
@@ -194,6 +195,12 @@ flist_contains(FList *flist, void *value) {
   }
 
   return false;
+}
+
+DS_EXPORT
+void*
+flist_at(FList *flist, int32_t index) {
+  return flist_sp_at(&flist->first, index);
 }
 
 DS_EXPORT

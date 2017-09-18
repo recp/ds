@@ -4,7 +4,7 @@
  */
 
 #include "common.h"
-#include "../include/ds/forward-list.h"
+#include "../include/ds/forward-list-sep.h"
 #include "default/default.h"
 
 #include <assert.h>
@@ -154,6 +154,22 @@ flist_sp_contains(FListItem **first, void *value) {
   }
 
   return false;
+}
+
+DS_EXPORT
+void*
+flist_sp_at(FListItem **first, int32_t index) {
+  FListItem *item;
+  int32_t    i;
+
+  item = *first;
+  for (i = 0; i < index && item; i++)
+    item = item->next;
+
+  if (item)
+    return item->data;
+
+  return NULL;
 }
 
 DS_EXPORT

@@ -82,6 +82,16 @@ bool
 flist_sp_contains(FListItem **first, void *value);
 
 /*!
+ * @brief return item at index
+ *
+ * @param[in]  first pointer to first item
+ * @param[in]  index index of element
+ */
+DS_EXPORT
+void*
+flist_sp_at(FListItem **first, int32_t index);
+
+/*!
  * @brief destroys forward list, frees all items
  *
  * @param[in]  first pointer to first item

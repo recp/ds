@@ -110,6 +110,16 @@ bool
 flist_contains(FList *flist, void *value);
 
 /*!
+ * @brief return item at index
+ *
+ * @param[in]  flist forward list
+ * @param[in]  index index of element
+ */
+DS_EXPORT
+void*
+flist_at(FList *flist, int32_t index);
+
+/*!
  * @brief empties forward list, frees all items except list
  *
  * @param[in]  flist forward list
