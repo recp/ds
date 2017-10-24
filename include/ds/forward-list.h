@@ -120,6 +120,15 @@ void*
 flist_at(FList *flist, int32_t index);
 
 /*!
+ * @brief return last item
+ *
+ * @param[in]  flist forward list
+ */
+DS_EXPORT
+void*
+flist_last(FList *flist);
+
+/*!
  * @brief empties forward list, frees all items except list
  *
  * @param[in]  flist forward list

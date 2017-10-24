@@ -173,6 +173,24 @@ flist_sp_at(FListItem **first, int32_t index) {
 }
 
 DS_EXPORT
+void*
+flist_sp_last(FListItem **first) {
+  FListItem *item;
+  
+  item = *first;
+  if (item && item->next) {
+    do {
+      item = item->next;
+    } while (item->next);
+  }
+
+  if (item)
+    return item->data;
+  
+  return NULL;
+}
+
+DS_EXPORT
 void
 flist_sp_destroy(FListItem **first) {
   DsAllocator *alc;

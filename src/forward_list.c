@@ -204,6 +204,17 @@ flist_at(FList *flist, int32_t index) {
 }
 
 DS_EXPORT
+void*
+flist_last(FList *flist) {
+  FListItem *item;
+
+  if ((item = flist->last))
+    return item->data;
+  
+  return NULL;
+}
+
+DS_EXPORT
 void
 flist_empty(FList *flist) {
   DsAllocator *alc;

@@ -92,6 +92,15 @@ void*
 flist_sp_at(FListItem **first, int32_t index);
 
 /*!
+ * @brief return last item
+ *
+ * @param[in]  first pointer to first item
+ */
+DS_EXPORT
+void*
+flist_sp_last(FListItem **first);
+
+/*!
  * @brief destroys forward list, frees all items
  *
  * @param[in]  first pointer to first item

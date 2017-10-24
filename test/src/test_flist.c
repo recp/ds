@@ -60,6 +60,8 @@ test_flist(void **state) {
       FListItem *item;
       float     *val;
 
+      assert(flist_last(flist) == flist_at(flist, 9));
+      
       item = flist->first;
       val  = item->data;
       flist_remove(flist, item);

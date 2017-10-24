@@ -47,6 +47,8 @@ test_flist_sep(void **state) {
       FListItem *item;
       float     *val;
 
+      assert(flist_sp_last(&first) == flist_sp_at(&first, 9));
+      
       item = first;
       val  = item->data;
       flist_sp_remove(&first, item);
