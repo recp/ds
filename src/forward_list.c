@@ -9,11 +9,11 @@
 
 #include <assert.h>
 
+static
 void
-flist_perform_remove(FList *flist,
-                     FListItem *prev,
-                     FListItem *item);
-
+flist_perform_rm(FList     *flist,
+                 FListItem *prev,
+                 FListItem *tofree);
 DS_EXPORT
 FList*
 flist_new(DsAllocator *allocator) {
@@ -81,6 +81,7 @@ flist_append(FList *flist,
   flist->count++;
 }
 
+static
 void
 flist_perform_rm(FList     *flist,
                  FListItem *prev,
@@ -212,6 +213,42 @@ flist_last(FList *flist) {
     return item->data;
   
   return NULL;
+}
+
+DS_EXPORT
+void*
+flist_pop(FList *flist) {
+  FListItem *item, *prev, *tofree;
+  void      *data;
+  
+  if (!(item = flist->last))
+    return NULL;
+  
+  data = item->data;
+  prev = flist->first;
+  if (!prev)
+    return data;
+  
+  if (prev == item) {
+    tofree = prev;
+    goto freeitm;
+  }
+  
+  tofree = NULL;
+  while (prev->next) {
+    if (prev->next == item) {
+      tofree = prev->next;
+      break;
+    }
+    prev = prev->next;
+  }
+  
+  if (!tofree)
+    return data;
+  
+freeitm:
+  flist_perform_rm(flist, prev, tofree);
+  return data;
 }
 
 DS_EXPORT

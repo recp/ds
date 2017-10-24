@@ -127,6 +127,15 @@ flist_at(FList *flist, int32_t index);
 DS_EXPORT
 void*
 flist_last(FList *flist);
+  
+/*!
+ * @brief remove last item from list without free-ing it
+ *
+ * @param[in]  flist forward list
+ */
+DS_EXPORT
+void*
+flist_pop(FList *flist);
 
 /*!
  * @brief empties forward list, frees all items except list
