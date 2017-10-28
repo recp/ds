@@ -42,3 +42,9 @@ ds_hashfn_sdbm(void *key) {
 
   return hash;
 }
+
+DS_EXPORT
+uint32_t
+ds_hashfn_ui32(void *key) {
+  return *(uint32_t *)key;
+}

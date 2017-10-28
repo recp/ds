@@ -21,6 +21,10 @@ ds_hashfn_djb2(void *key);
 DS_EXPORT
 uint32_t
 ds_hashfn_sdbm(void *key);
+  
+DS_EXPORT
+uint32_t
+ds_hashfn_ui32(void *key);
 
 #ifdef __cplusplus
 }
