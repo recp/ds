@@ -43,6 +43,14 @@ HTable*
 hash_new_str(uint32_t capacity);
 
 DS_EXPORT
+HTable*
+hash_new_i32(uint32_t capacity);
+
+DS_EXPORT
+HTable*
+hash_new_ui32(uint32_t capacity);
+
+DS_EXPORT
 void
 hash_set(HTable *htable,
          void   *key,
