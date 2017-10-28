@@ -57,6 +57,24 @@ hash_new_str(uint32_t capacity) {
                   capacity);
 }
 
+DS_EXPORT
+HTable*
+hash_new_i32(uint32_t capacity) {
+  return hash_new(ds_allocator(),
+                  ds_hashfn_i32,
+                  ds_cmp_i32,
+                  capacity);
+}
+
+DS_EXPORT
+HTable*
+hash_new_ui32(uint32_t capacity) {
+  return hash_new(ds_allocator(),
+                  ds_hashfn_ui32,
+                  ds_cmp_ui32,
+                  capacity);
+}
+
 static
 bool
 hash_finditem(HTable      *htable,

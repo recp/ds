@@ -39,6 +39,17 @@ ds_cmp_i32(void *key1, void *key2) {
 
 DS_EXPORT
 int
+ds_cmp_ui32(void *key1, void *key2) {
+  uint32_t a, b;
+  
+  a = *(uint32_t *)key1;
+  b = *(uint32_t *)key2;
+  
+  return a - b;
+}
+
+DS_EXPORT
+int
 ds_cmp_i32p(void *key1, void *key2) {
   int32_t a, b;
 
@@ -75,6 +86,12 @@ DS_EXPORT
 void
 ds_print_i32(void *key) {
   printf("\t%d\n", *(int32_t *)key);
+}
+
+DS_EXPORT
+void
+ds_print_ui32(void *key) {
+  printf("\t%u\n", *(uint32_t *)key);
 }
 
 DS_EXPORT
