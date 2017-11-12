@@ -80,6 +80,17 @@ flist_append(FList *flist,
              void  *value);
 
 /*!
+ * @brief index of element (first found element)
+ *
+ * @param[in]  flist forward list
+ * @param[in]  value value pointer
+ */
+DS_EXPORT
+int32_t
+flist_indexof(FList *flist,
+              void  *value);
+
+/*!
  * @brief remove an item from list by list item, don't free item manually
  *
  * @param[in]  flist forward list

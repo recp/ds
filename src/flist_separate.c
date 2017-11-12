@@ -58,6 +58,27 @@ flist_sp_append(FListItem **first,
   last->next = item;
 }
 
+DS_EXPORT
+int32_t
+flist_sp_indexof(FListItem **first,
+                 void       *value) {
+  FListItem *item;
+  int32_t    idx;
+  
+  idx  = 0;
+  item = *first;
+
+  while (item) {
+    if (item->data == value)
+      return idx;
+    
+    idx++;
+    item = item->next;
+  }
+
+  return -1;
+}
+
 static
 void
 flist_sp_perform_rm(FListItem **first,

@@ -52,6 +52,17 @@ flist_sp_append(FListItem **first,
                 void       *value);
 
 /*!
+ * @brief index of element (first found element)
+ *
+ * @param[in]  first pointer to first item
+ * @param[in]  value value pointer
+ */
+DS_EXPORT
+int32_t
+flist_sp_indexof(FListItem **first,
+                 void       *value);
+
+/*!
  * @brief remove an item from list by list item, don't free item manually
  *
  * @param[in]  first pointer to first item

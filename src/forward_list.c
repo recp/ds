@@ -81,6 +81,13 @@ flist_append(FList *flist,
   flist->count++;
 }
 
+DS_EXPORT
+int32_t
+flist_indexof(FList *flist,
+              void  *value) {
+  return flist_sp_indexof(&flist->first, value);
+}
+
 static
 void
 flist_perform_rm(FList     *flist,
