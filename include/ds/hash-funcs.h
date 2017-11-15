@@ -24,6 +24,10 @@ ds_hashfn_sdbm(void *key);
 
 DS_EXPORT
 uint32_t
+ds_hashfn_ptr(void *key);
+
+DS_EXPORT
+uint32_t
 ds_hashfn_ui32(void *key);
 
 DS_EXPORT
