@@ -44,6 +44,10 @@ hash_new_str(uint32_t capacity);
 
 DS_EXPORT
 HTable*
+hash_new_ptr(uint32_t capacity);
+
+DS_EXPORT
+HTable*
 hash_new_i32(uint32_t capacity);
 
 DS_EXPORT

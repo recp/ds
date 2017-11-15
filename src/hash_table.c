@@ -59,6 +59,15 @@ hash_new_str(uint32_t capacity) {
 
 DS_EXPORT
 HTable*
+hash_new_ptr(uint32_t capacity) {
+  return hash_new(ds_allocator(),
+                  ds_hashfn_ptr,
+                  ds_cmp_ptr,
+                  capacity);
+}
+
+DS_EXPORT
+HTable*
 hash_new_i32(uint32_t capacity) {
   return hash_new(ds_allocator(),
                   ds_hashfn_i32,
