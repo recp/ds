@@ -116,9 +116,9 @@ rb_newtree(DsAllocator *allocator,
 
   alc      = !allocator ? ds_allocator() : allocator;
 
-  tree     = alc->calloc(sizeof(*tree), 1);
-  rootNode = alc->calloc(sizeof(*rootNode), 1);
-  nullNode = alc->calloc(sizeof(*rootNode), 1);
+  tree     = alc->calloc(1, sizeof(*tree));
+  rootNode = alc->calloc(1, sizeof(*rootNode));
+  nullNode = alc->calloc(1, sizeof(*rootNode));
 
   assert(tree && rootNode && nullNode);
 

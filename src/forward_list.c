@@ -21,7 +21,7 @@ flist_new(DsAllocator *allocator) {
   FList       *flist;
 
   alc   = !allocator ? ds_allocator() : allocator;
-  flist = alc->calloc(sizeof(*flist), 1);
+  flist = alc->calloc(1, sizeof(*flist));
 
   assert(flist);
 
@@ -37,7 +37,7 @@ flist_insert(FList *flist,
              void  *value) {
   FListItem *item;
 
-  item = flist->alc->calloc(sizeof(*item), 1);
+  item = flist->alc->calloc(1, sizeof(*item));
   item->data = value;
 
   item->next = flist->first;
@@ -58,7 +58,7 @@ flist_append(FList *flist,
              void  *value) {
   FListItem *item;
 
-  item = flist->alc->calloc(sizeof(*item), 1);
+  item = flist->alc->calloc(1, sizeof(*item));
   item->data = value;
   item->next = NULL; /* we are appending it */
 
@@ -218,7 +218,7 @@ flist_last(FList *flist) {
 
   if ((item = flist->last))
     return item->data;
-  
+
   return NULL;
 }
 
@@ -227,20 +227,20 @@ void*
 flist_pop(FList *flist) {
   FListItem *item, *prev, *tofree;
   void      *data;
-  
+
   if (!(item = flist->last))
     return NULL;
-  
+
   data = item->data;
   prev = flist->first;
   if (!prev)
     return data;
-  
+
   if (prev == item) {
     tofree = prev;
     goto freeitm;
   }
-  
+
   tofree = NULL;
   while (prev->next) {
     if (prev->next == item) {
@@ -249,10 +249,10 @@ flist_pop(FList *flist) {
     }
     prev = prev->next;
   }
-  
+
   if (!tofree)
     return data;
-  
+
 freeitm:
   flist_perform_rm(flist, prev, tofree);
   return data;

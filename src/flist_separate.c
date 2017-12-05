@@ -23,7 +23,7 @@ flist_sp_insert(FListItem **first,
   FListItem   *item;
 
   alc  = ds_allocator();
-  item = alc->calloc(sizeof(*item), 1);
+  item = alc->calloc(1, sizeof(*item));
 
   item->data = value;
   item->next = *first;
@@ -39,7 +39,7 @@ flist_sp_append(FListItem **first,
   FListItem   *last;
 
   alc  = ds_allocator();
-  item = alc->calloc(sizeof(*item), 1);
+  item = alc->calloc(1, sizeof(*item));
 
   item->data = value;
   item->next = NULL; /* we are appending it */
@@ -64,14 +64,14 @@ flist_sp_indexof(FListItem **first,
                  void       *value) {
   FListItem *item;
   int32_t    idx;
-  
+
   idx  = 0;
   item = *first;
 
   while (item) {
     if (item->data == value)
       return idx;
-    
+
     idx++;
     item = item->next;
   }
@@ -197,7 +197,7 @@ DS_EXPORT
 void*
 flist_sp_last(FListItem **first) {
   FListItem *item;
-  
+
   item = *first;
   if (item && item->next) {
     do {
@@ -207,7 +207,7 @@ flist_sp_last(FListItem **first) {
 
   if (item)
     return item->data;
-  
+
   return NULL;
 }
 

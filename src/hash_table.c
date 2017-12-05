@@ -32,10 +32,10 @@ hash_new(DsAllocator *allocator,
   HTable   *htable;
 
   alc      = !allocator ? ds_allocator() : allocator;
-  htable   = alc->calloc(sizeof(*htable), 1);
+  htable   = alc->calloc(1, sizeof(*htable));
 
   capacity = (uint32_t)ds_prime_num(capacity);
-  htable->table = alc->calloc(sizeof(*htable->table), capacity);
+  htable->table = alc->calloc(capacity, sizeof(*htable->table));
 
   assert(htable);
 
@@ -181,7 +181,7 @@ hash_set(HTable *htable,
     return;
   }
 
-  item = htable->alc->calloc(sizeof(*item), 1);
+  item = htable->alc->calloc(1, sizeof(*item));
   item->key          = key;
   item->data         = value;
 
@@ -246,7 +246,7 @@ hash_resize(HTable  *htable,
   /* free / malloc */
   if (capacity > htable->capacity) {
     alc->free(table);
-    table = alc->calloc(sizeof(*table), capacity);
+    table = alc->calloc(capacity, sizeof(*table));
   }
 
   /* realloc must be faster than free/malloc here */
