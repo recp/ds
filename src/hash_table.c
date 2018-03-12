@@ -268,3 +268,29 @@ hash_resize(HTable  *htable,
     hash_insert(htable, item);
   }
 }
+
+DS_EXPORT
+void
+hash_destroy(HTable *ht) {
+  DsAllocator *alc;
+  HTableItem **table;
+  HTableItem  *item, *tofree;
+  uint32_t     i;
+
+  alc   = ht->alc;
+  table = ht->table;
+
+  for (i = 0; i < ht->capacity; i++) {
+    if (!(item = table[i]))
+      continue;
+
+    while (item) {
+      tofree = item;
+      item = item->next;
+      alc->free(tofree);
+    }
+  }
+
+  alc->free(table);
+  alc->free(ht);
+}

@@ -75,6 +75,10 @@ void
 hash_resize(HTable  *htable,
             uint32_t capacity);
 
+DS_EXPORT
+void
+hash_destroy(HTable *ht);
+
 #ifdef __cplusplus
 }
 #endif
