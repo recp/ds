@@ -22,4 +22,7 @@
 #  define D_ALIGN(X) __attribute((aligned(X)))
 #endif
 
+#define DS_ITOP(I)    ((void *)(uintptr_t)I)
+#define DS_PTOI(I, T) ((T)(uintptr_t)I)
+
 #endif /* common_h */
