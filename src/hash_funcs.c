@@ -60,3 +60,15 @@ uint32_t
 ds_hashfn_i32(void *key) {
   return *(int32_t *)key;
 }
+
+DS_EXPORT
+uint32_t
+ds_hashfn_i32p(void *key) {
+  return (int32_t)key;
+}
+
+DS_EXPORT
+uint32_t
+ds_hashfn_ui32p(void *key) {
+  return (uint32_t)key;
+}

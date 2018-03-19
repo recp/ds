@@ -34,6 +34,14 @@ DS_EXPORT
 uint32_t
 ds_hashfn_i32(void *key);
 
+DS_EXPORT
+uint32_t
+ds_hashfn_i32p(void *key);
+
+DS_EXPORT
+uint32_t
+ds_hashfn_ui32p(void *key);
+  
 #ifdef __cplusplus
 }
 #endif
