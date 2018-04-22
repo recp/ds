@@ -19,7 +19,7 @@
 #  define DS_EXPORT  __attribute__((visibility("default")))
 #  define DS_HIDE    __attribute__((visibility("hidden")))
 #  define DS_INLINE inline __attribute((always_inline))
-#  define D_ALIGN(X) __attribute((aligned(X)))
+#  define DS_ALIGN(X) __attribute((aligned(X)))
 #endif
 
 #define DS_ITOP(I)    ((void *)(uintptr_t)I)
