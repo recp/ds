@@ -1,6 +1,6 @@
 # libds - Data Structures
 
-[![Build Status](https://travis-ci.org/recp/libds.svg?branch=master)](https://travis-ci.org/recp/libds)
+[![Build Status](https://travis-ci.org/recp/ds.svg?branch=master)](https://travis-ci.org/recp/libds)
 [![Build status](https://ci.appveyor.com/api/projects/status/yqpyll64woh39a23/branch/master?svg=true)](https://ci.appveyor.com/project/recp/libds/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/recp/libds/badge.svg?branch=master)](https://coveralls.io/github/recp/libds?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/50b73a3049b9497a97fe7468a9d79d08)](https://www.codacy.com/app/recp/libds?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=recp/libds&amp;utm_campaign=Badge_Grade)
