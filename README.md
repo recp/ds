@@ -9,7 +9,9 @@ This library provides common data structures. It will also provide some data str
 
 There may multiple way to implement a data structure but I tried to implement best way to do that. For instance Red-Black Trees are only implemented as top down insertion/deletion to make it faster. 
 
-You can provide custom allocators, compare and hash functions.
+There are some convenient constructors for common use cases. For instance `rb_newtree_str()` creates new rb-tree that uses strings as key, `rb_newtree_ptr()` creates new rb-tree that uses pointers as key. When you use these functions to alloc a data structure then you don't need to provide compare or print functions. 
+
+This library prodives allocator api so you can override default allocator. 
 
 ## Usage
 
@@ -60,9 +62,9 @@ $ [sudo] make install
 ```
 
 ### Windows (MSBuild)
-Windows related build files, project files are located in `win` folder,
-make sure that you are inside `libds/win` folder.
-Code Analysis are enabled, it may take awhile to build
+Windows related build, project files are located in `win` folder,
+make sure that you are inside in the `libds/win` folder.
+Code Analysis are enabled, it may take awhile to finish build
 
 ```Powershell
 $ cd win
