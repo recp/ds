@@ -11,10 +11,27 @@ There may multiple way to implement a data structure but I tried to implement be
 
 You can provide custom allocators, compare and hash functions.
 
+## Usage
+
 ```C
-#include <ds/rb.h>
-#include <ds/hash.h>
-#include <ds/octree.h>
+#include <ds/rb.h> // Red-Black Tree
+
+int
+main(int argc, const char * argv[]) {
+  RBTree *tree;
+  /* ... */
+
+  /* use string keys */
+  tree = rb_newtree_str();
+
+  rb_insert(tree, "key", value);
+
+  /* ... */
+  value = rb_find(tree, "key");
+
+  rb_destroy(tree);
+}
+
 ```
 
 ## Todo
