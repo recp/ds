@@ -58,6 +58,7 @@ typedef struct RBTree {
   DsAllocator *alc;
   RBNode      *root;
   RBNode      *nullNode;
+  void        *userData;
   DsCmpFn      cmp;
   DsPrintFn    print;
   RBNodeFn     onFreeNode;
