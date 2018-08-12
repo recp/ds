@@ -212,6 +212,7 @@ rb_insert(RBTree *tree,
   if (tree->root->chld[RB_RIGHT] == tree->nullNode) {
     RB_MKBLCK(newnode);
     tree->root->chld[RB_RIGHT] = newnode;
+    tree->count++;
     return;
   }
 
