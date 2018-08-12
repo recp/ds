@@ -7,6 +7,24 @@
      Separate version does not keep extra information like allocator, count...
      it reduces FList size. FList groups items with same specific allocator,
      separate version uses default allocator.
+
+     Always pass first element by reference.
+
+     Example:
+       typedef struct A_Struct {
+          FListItem *values;
+       };
+
+       flist_sp_insert(&obj->buffers, value);
+
+       ...
+
+       FListItem *item;
+       item = obj->values;
+       while (item) {
+         value = item->data;
+         item  = item->next;
+       }
  */
 
  /*
