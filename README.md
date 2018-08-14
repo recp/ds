@@ -44,8 +44,13 @@ main(int argc, const char * argv[]) {
 - [x] hash-table
    - [x] builtin hash functions e.g. djb2
    - [x] resizing hash table
+- [ ] queue (working on this)
+- [ ] stack
+- [ ] binary heap / priority queue
+- [ ] dynamic array
 - [ ] octree
 - [ ] quadtree
+- [ ] b-tree
 
 ## Build
 
