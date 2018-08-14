@@ -41,6 +41,7 @@ main(int argc, const char * argv[]) {
    - [x] top-down insertion
    - [x] top-down deletion
 - [x] forward-list
+  - [x] forward-list-separate (reduces FList struct)
 - [x] hash-table
    - [x] builtin hash functions e.g. djb2
    - [x] resizing hash table
