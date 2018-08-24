@@ -9,7 +9,9 @@
 #include "../common.h"
 #include "../../include/ds/sort.h"
 
-#define partition(p, TYPE, op1, op2)                                          \
+#define CALLBACK  cb(A, i, j);
+
+#define partition(p, TYPE, op1, op2, CA)                                      \
   do {                                                                        \
     uint32_t i, j;                                                            \
     TYPE     tmp, PIVOT;                                                      \
@@ -33,45 +35,14 @@
       }                                                                       \
                                                                               \
       swap2(tmp, A[i], A[j]);                                                 \
+      CA                                                                      \
     }                                                                         \
   } while(0)                                                                  \
 
-#define partition_cb(p, TYPE, op1, op2)                                       \
-  do {                                                                        \
-    uint32_t i, j;                                                            \
-    TYPE     tmp, PIVOT;                                                      \
-                                                                              \
-    PIVOT = A[lo];                                                            \
-    i     = lo - 1;                                                           \
-    j     = hi + 1;                                                           \
-                                                                              \
-    for (;;) {                                                                \
-      do {                                                                    \
-        i++;                                                                  \
-      } while (A[i] op1 PIVOT);                                               \
-                                                                              \
-      do {                                                                    \
-        j--;                                                                  \
-      } while (A[j] op2 PIVOT);                                               \
-                                                                              \
-      if (i >= j) {                                                           \
-        p = j;                                                                \
-        break;                                                                \
-      }                                                                       \
-                                                                              \
-      swap2(tmp, A[i], A[j]);                                                 \
-      cb(A, i, j);                                                            \
-    }                                                                         \
-  } while(0)                                                                  \
-
-#define partition_asc(TYPE, PIVOT)                                            \
-  partition(PIVOT, TYPE, <, >)
-#define partition_dsc(TYPE, PIVOT)                                            \
-  partition(PIVOT, TYPE, >, <)
-#define partition_asc_cb(TYPE, PIVOT)                                         \
-  partition_cb(PIVOT, TYPE, <, >)
-#define partition_dsc_cb(TYPE, PIVOT)                                         \
-  partition_cb(PIVOT, TYPE, >, <)
+#define partition_asc(TYPE, PIVOT,CA)                                         \
+  partition(PIVOT, TYPE, <, >, CA)
+#define partition_dsc(TYPE, PIVOT,CA)                                         \
+  partition(PIVOT, TYPE, >, <, CA)
 
 #define DEFINE_SORT_FUNC(POSTFIX, TYPE, ORDER)                                \
   static                                                                      \
@@ -82,7 +53,7 @@
     uint32_t p;                                                               \
                                                                               \
     if (lo < hi) {                                                            \
-      partition_ ## ORDER(TYPE, p);                                           \
+      partition_ ## ORDER(TYPE, p,);                                          \
       sort ## POSTFIX ## _ ## ORDER(A, lo, p);                                \
       sort ## POSTFIX ## _ ## ORDER(A, p + 1, hi);                            \
     }                                                                         \
@@ -97,7 +68,7 @@
     uint32_t p;                                                               \
                                                                               \
     if (lo < hi) {                                                            \
-      partition_ ## ORDER ## _cb(TYPE, p);                                    \
+      partition_ ## ORDER(TYPE, p, CALLBACK);                                 \
       sort ## POSTFIX ## _ ## ORDER ## _cb(A, cb, lo, p);                     \
       sort ## POSTFIX ## _ ## ORDER ## _cb(A, cb, p + 1, hi);                 \
     }                                                                         \
