@@ -152,7 +152,7 @@ hash_insert(HTable     *htable,
     htable->table[idx] = item;
   }
 
-  /* there is no need to access array (read + write),
+  /* there is no need to access buffer (read + write),
    just append it */
   else {
     prev->next = item;
@@ -190,7 +190,7 @@ hash_set(HTable *htable,
     htable->table[idx] = item;
   }
 
-  /* there is no need to access array (read + write),
+  /* there is no need to access buffer (read + write),
      just append it */
   else {
     prev->next = item;

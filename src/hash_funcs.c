@@ -64,11 +64,11 @@ ds_hashfn_i32(void *key) {
 DS_EXPORT
 uint32_t
 ds_hashfn_i32p(void *key) {
-  return (int32_t)key;
+  return (int32_t)(intptr_t)key;
 }
 
 DS_EXPORT
 uint32_t
 ds_hashfn_ui32p(void *key) {
-  return (uint32_t)key;
+  return (uint32_t)(uintptr_t)key;
 }

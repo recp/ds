@@ -28,6 +28,9 @@
     <Filter Include="test\src">
       <UniqueIdentifier>{b9f8b30a-6091-4fb0-96e2-52029459d024}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\sort">
+      <UniqueIdentifier>{bcfd119c-06c3-4c43-b005-4eb4b103513f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\ds\rb.h">
@@ -66,6 +69,12 @@
     <ClInclude Include="..\include\ds\forward-list-sep.h">
       <Filter>include\ds</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ds\sort.h">
+      <Filter>include\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sort\sort_common.h">
+      <Filter>src\sort</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\rb.c">
@@ -91,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="..\src\flist_separate.c">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sort\sort.c">
+      <Filter>src\sort</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
