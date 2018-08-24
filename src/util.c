@@ -53,8 +53,8 @@ int
 ds_cmp_i32p(void *key1, void *key2) {
   int32_t a, b;
 
-  a = (int32_t)key1;
-  b = (int32_t)key2;
+  a = (int32_t)(intptr_t)key1;
+  b = (int32_t)(intptr_t)key2;
 
   return a - b;
 }
@@ -64,8 +64,8 @@ int
 ds_cmp_ui32p(void *key1, void *key2) {
   uint32_t a, b;
 
-  a = (uint32_t)key1;
-  b = (uint32_t)key2;
+  a = (uint32_t)(uintptr_t)key1;
+  b = (uint32_t)(uintptr_t)key2;
 
   return a - b;
 }
