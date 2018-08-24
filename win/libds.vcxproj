@@ -23,7 +23,7 @@
     <ProjectGuid>{CA8BCAF9-CD25-4133-8F62-3D1449B5D2FC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>libds</RootNamespace>
-		<WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -173,9 +173,11 @@
     <ClInclude Include="..\include\ds\hash.h" />
     <ClInclude Include="..\include\ds\hashtable.h" />
     <ClInclude Include="..\include\ds\rb.h" />
+    <ClInclude Include="..\include\ds\sort.h" />
     <ClInclude Include="..\include\ds\util.h" />
     <ClInclude Include="..\src\common.h" />
     <ClInclude Include="..\src\default\default.h" />
+    <ClInclude Include="..\src\sort\sort_common.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\allocator.c" />
@@ -185,6 +187,7 @@
     <ClCompile Include="..\src\hash_funcs.c" />
     <ClCompile Include="..\src\hash_table.c" />
     <ClCompile Include="..\src\rb.c" />
+    <ClCompile Include="..\src\sort\sort.c" />
     <ClCompile Include="..\src\util.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
