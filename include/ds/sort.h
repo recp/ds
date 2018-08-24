@@ -29,6 +29,24 @@ typedef void (*DsSortSwapFunc)(void * __restrict arr,
                          bool              asc,                               \
                          DsSortSwapFunc    swapCb);
 
+/*
+ these macros defines functions declerations.
+
+ for instance DS_DEFINE_SORT(f, float) defines functions for float like below:
+
+ DS_EXPORT
+ void
+ sortf(float * __restrict arr,
+       uint32_t           count);
+
+ DS_EXPORT
+ void
+ sortf_ex(float * __restrict arr,
+          uint32_t           count,
+          bool               asc,
+          DsSortSwapFunc     swapCb);
+ */
+
 DS_DEFINE_SORT(f,   float)
 DS_DEFINE_SORT(d,   double)
 DS_DEFINE_SORT(i,   int32_t)
@@ -36,4 +54,6 @@ DS_DEFINE_SORT(u,   uint32_t)
 DS_DEFINE_SORT(i64, int64_t)
 DS_DEFINE_SORT(u64, uint64_t)
 
+#undef DS_DEFINE_SORT
+  
 #endif /* ds_sort_h */

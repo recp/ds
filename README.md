@@ -45,6 +45,7 @@ main(int argc, const char * argv[]) {
 - [x] hash-table
    - [x] builtin hash functions e.g. djb2
    - [x] resizing hash table
+- [x] quick sort implementation for float, double, i32, u32, i64, u64
 - [ ] queue (working on this)
 - [ ] stack
 - [ ] binary heap / priority queue
