@@ -30,7 +30,7 @@ typedef void (*DsSortSwapFunc)(void * __restrict arr,
                          DsSortSwapFunc    swapCb);
 
 /*
- these macros defines functions declerations.
+ these macros define function declerations.
 
  for instance DS_DEFINE_SORT(f, float) defines functions for float like below:
 

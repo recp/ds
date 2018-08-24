@@ -5,9 +5,9 @@
 
 #include "sort_common.h"
 
-DEFINE_SORT(f, float)
-DEFINE_SORT(d, double)
-DEFINE_SORT(i, int32_t)
-DEFINE_SORT(u, uint32_t)
+DEFINE_SORT(f,   float)
+DEFINE_SORT(d,   double)
+DEFINE_SORT(i,   int32_t)
+DEFINE_SORT(u,   uint32_t)
 DEFINE_SORT(i64, int64_t)
 DEFINE_SORT(u64, uint64_t)
