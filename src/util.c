@@ -82,6 +82,17 @@ ds_cmp_i64(void *key1, void *key2) {
 }
 
 DS_EXPORT
+int
+ds_cmp_ui64(void *key1, void *key2) {
+  uint64_t a, b;
+
+  a = *(uint64_t *)key1;
+  b = *(uint64_t *)key2;
+
+  return (int)(a - b);
+}
+
+DS_EXPORT
 void
 ds_print_str(void *key) {
   printf("\t'%s'\n", (const char *)key);
@@ -109,6 +120,12 @@ DS_EXPORT
 void
 ds_print_i64(void *key) {
   printf("\t%llu\n", *(int64_t *)key);
+}
+
+DS_EXPORT
+void
+ds_print_ui64(void *key) {
+  printf("\t%llu\n", *(uint64_t *)key);
 }
 
 DS_EXPORT
