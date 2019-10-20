@@ -1,4 +1,4 @@
-# 🔗 Data Structures
+# 🔗 Data Structures and Algorithms
 
 [![Build Status](https://travis-ci.org/recp/ds.svg?branch=master)](https://travis-ci.org/recp/libds)
 [![Build status](https://ci.appveyor.com/api/projects/status/yqpyll64woh39a23/branch/master?svg=true)](https://ci.appveyor.com/project/recp/libds/branch/master)
@@ -58,14 +58,12 @@ main(int argc, const char * argv[]) {
 
 ### Unix (Autotools)
 
-```text
-$ sh ./build-deps.sh # run only once (dependencies)
-$
+```bash
 $ sh autogen.sh
 $ ./configure
 $ make
-$ make install
-$ [sudo] make install
+$ make check # [Optional]
+$ [sudo] make install # [Optional]
 ```
 
 ### Windows (MSBuild)

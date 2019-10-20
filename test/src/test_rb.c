@@ -33,35 +33,36 @@ test_rb_print_float(void *key) {
 static
 void
 test_rb_freenode(RBTree *tree, RBNode *node) {
-  assert_non_null(node);
-  assert_non_null(node->val);
+  assert(node);
+  assert(node->val);
 
   /* free value */
   free(node->val);
 }
 
+static
 void
 test_rb_foundkey(RBTree *tree, void* key, bool *replace) {
   printf("duplicated key: '%s'\n", key);
   *replace = true;
 }
 
+static
 void
 test_rb_walk(RBTree *tree, RBNode *node) {
   RBNode *parent;
   int     side;
 
-  assert_non_null(node->chld[0]);
-  assert_non_null(node->chld[1]);
+  assert(node->chld[0]);
+  assert(node->chld[1]);
 
   side = rb_parent(tree, node->key, &parent);
-  assert_non_null(parent); /* because we are walking on it */
+  assert(parent); /* because we are walking on it */
 
-  assert_true(parent->chld[side] == node);
+  assert(parent->chld[side] == node);
 }
 
-void
-test_rb_topdown_str(void **state) {
+TEST_IMPL(rb_topdown_str) {
   RBTree *tree;
   RBNode *node;
   void   *found;
@@ -86,18 +87,18 @@ test_rb_topdown_str(void **state) {
     rb_insert(tree, key, key);
 
     /* test balance */
-    assert(rb_assert(tree, tree->root->chld[1]));
+    ASSERT(rb_assert(tree, tree->root->chld[1]));
 
     /* test find node */
     node = rb_find_node(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* test find value */
     found = rb_find(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* found values must be same */
-    assert_ptr_equal(node->val, found);
+    ASSERT(node->val == found);
 
     inserted_items[i] = node->key;
   }
@@ -113,18 +114,18 @@ test_rb_topdown_str(void **state) {
     rb_insert(tree, key, key);
 
     /* test balance */
-    assert_true(rb_assert(tree, tree->root->chld[1]));
+    ASSERT(rb_assert(tree, tree->root->chld[1]));
 
     /* test find node */
     node = rb_find_node(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* test find value */
     found = rb_find(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* found values must be same */
-    assert_ptr_equal(node->val, found);
+    ASSERT(node->val == found);
 
     inserted_items[i + 1000] = node->key;
   }
@@ -134,11 +135,11 @@ test_rb_topdown_str(void **state) {
     rb_remove(tree, inserted_items[i]);
 
     /* test balance */
-    assert_true(rb_assert(tree, tree->root->chld[1]));
+    ASSERT(rb_assert(tree, tree->root->chld[1]));
   }
 
   /* we remove all nodes */
-  assert_true(rb_isempty(tree));
+  ASSERT(rb_isempty(tree));
 
   /* random size */
   for (i = 0; i < 100; i++) {
@@ -151,18 +152,18 @@ test_rb_topdown_str(void **state) {
     rb_insert(tree, key, key);
 
     /* test balance */
-    assert_true(rb_assert(tree, tree->root->chld[1]));
+    ASSERT(rb_assert(tree, tree->root->chld[1]));
 
     /* test find node */
     node = rb_find_node(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* test find value */
     found = rb_find(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* found values must be same */
-    assert_ptr_equal(node->val, found);
+    ASSERT(node->val == found);
 
     inserted_items[i] = node->key;
   }
@@ -172,17 +173,18 @@ test_rb_topdown_str(void **state) {
 
   /* we removed all nodes */
   rb_empty(tree);
-  assert_true(rb_isempty(tree));
+  ASSERT(rb_isempty(tree));
 
   key = strdup(keybuf);
   rb_insert(tree, key, key);
 
   rb_print(tree);
   rb_destroy(tree);
+
+  TEST_SUCCESS
 }
 
-void
-test_rb_topdown_ptr(void **state) {
+TEST_IMPL(rb_topdown_ptr) {
   RBTree   *tree;
   RBNode   *node;
   void     *key;
@@ -204,23 +206,23 @@ test_rb_topdown_ptr(void **state) {
     rb_insert(tree, key, key);
 
     /* test balance */
-    assert(rb_assert(tree, tree->root->chld[1]));
+    ASSERT(rb_assert(tree, tree->root->chld[1]));
 
     /* test find node */
     node = rb_find_node(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* test find value */
     found = rb_find(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* found values must be same */
-    assert_ptr_equal(node->val, found);
+    ASSERT(node->val == found);
   }
 
   /* we removed all nodes */
   rb_empty(tree);
-  assert_true(rb_isempty(tree));
+  ASSERT(rb_isempty(tree));
 
   k   =  rand() % 10000;
   key = (void *)k;
@@ -228,10 +230,11 @@ test_rb_topdown_ptr(void **state) {
 
   rb_print(tree);
   rb_destroy(tree);
+
+  TEST_SUCCESS
 }
 
-void
-test_rb_topdown_custom_cmp(void **state) {
+TEST_IMPL(rb_topdown_custom_cmp) {
   RBTree   *tree;
   RBNode   *node;
   float    *key;
@@ -253,23 +256,23 @@ test_rb_topdown_custom_cmp(void **state) {
     rb_insert(tree, key, key);
 
     /* test balance */
-    assert(rb_assert(tree, tree->root->chld[1]));
+    ASSERT(rb_assert(tree, tree->root->chld[1]));
 
     /* test find node */
     node = rb_find_node(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* test find value */
     found = rb_find(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* found values must be same */
-    assert_ptr_equal(node->val, found);
+    ASSERT(node->val == found);
   }
 
   /* we removed all nodes */
   rb_empty(tree);
-  assert_true(rb_isempty(tree));
+  ASSERT(rb_isempty(tree));
 
   key  = malloc(sizeof(*key));
   *key = (float)drand48();
@@ -277,10 +280,11 @@ test_rb_topdown_custom_cmp(void **state) {
   rb_print(tree);
 
   rb_destroy(tree);
+
+  TEST_SUCCESS
 }
 
-void
-test_rb_topdown_custom_cmp_i32(void **state) {
+TEST_IMPL(rb_topdown_custom_cmp_i32) {
   RBTree   *tree;
   RBNode   *node;
   int32_t  *key;
@@ -302,23 +306,23 @@ test_rb_topdown_custom_cmp_i32(void **state) {
     rb_insert(tree, key, key);
 
     /* test balance */
-    assert(rb_assert(tree, tree->root->chld[1]));
+    ASSERT(rb_assert(tree, tree->root->chld[1]));
 
     /* test find node */
     node = rb_find_node(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* test find value */
     found = rb_find(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* found values must be same */
-    assert_ptr_equal(node->val, found);
+    ASSERT(node->val == found);
   }
 
   /* we removed all nodes */
   rb_empty(tree);
-  assert_true(rb_isempty(tree));
+  ASSERT(rb_isempty(tree));
 
   key  = malloc(sizeof(*key));
   *key = rand() % 10000;
@@ -326,10 +330,11 @@ test_rb_topdown_custom_cmp_i32(void **state) {
   rb_print(tree);
 
   rb_destroy(tree);
+
+  TEST_SUCCESS
 }
 
-void
-test_rb_topdown_custom_cmp_i64(void **state) {
+TEST_IMPL(rb_topdown_custom_cmp_i64) {
   RBTree   *tree;
   RBNode   *node;
   int64_t  *key;
@@ -351,23 +356,23 @@ test_rb_topdown_custom_cmp_i64(void **state) {
     rb_insert(tree, key, key);
 
     /* test balance */
-    assert(rb_assert(tree, tree->root->chld[1]));
+    ASSERT(rb_assert(tree, tree->root->chld[1]));
 
     /* test find node */
     node = rb_find_node(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* test find value */
     found = rb_find(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* found values must be same */
-    assert_ptr_equal(node->val, found);
+    ASSERT(node->val == found);
   }
 
   /* we removed all nodes */
   rb_empty(tree);
-  assert_true(rb_isempty(tree));
+  ASSERT(rb_isempty(tree));
 
   key  = malloc(sizeof(*key));
   *key = rand() % 10000;
@@ -375,10 +380,11 @@ test_rb_topdown_custom_cmp_i64(void **state) {
   rb_print(tree);
 
   rb_destroy(tree);
+
+  TEST_SUCCESS
 }
 
-void
-test_rb_topdown_freeenode(void **state) {
+TEST_IMPL(rb_topdown_freeenode) {
   RBTree   *tree;
   RBNode   *node;
   float    *key;
@@ -401,23 +407,23 @@ test_rb_topdown_freeenode(void **state) {
     rb_insert(tree, key, key);
 
     /* test balance */
-    assert(rb_assert(tree, tree->root->chld[1]));
+    ASSERT(rb_assert(tree, tree->root->chld[1]));
 
     /* test find node */
     node = rb_find_node(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* test find value */
     found = rb_find(tree, key);
-    assert_non_null(node);
+    ASSERT(node);
 
     /* found values must be same */
-    assert_ptr_equal(node->val, found);
+    ASSERT(node->val == found);
   }
 
   /* we removed all nodes */
   rb_empty(tree);
-  assert_true(rb_isempty(tree));
+  ASSERT(rb_isempty(tree));
 
   key  = malloc(sizeof(*key));
   *key = (float)drand48();
@@ -425,4 +431,6 @@ test_rb_topdown_freeenode(void **state) {
   rb_print(tree);
 
   rb_destroy(tree);
+
+  TEST_SUCCESS
 }

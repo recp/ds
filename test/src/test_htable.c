@@ -10,8 +10,7 @@
 /* keep top 2000 to test remove */
 static char *inserted_items[2000];
 
-void
-test_htable(void **state) {
+TEST_IMPL(htable) {
   char     keybuf[256];
   HTable  *htable;
   void    *found;
@@ -23,7 +22,7 @@ test_htable(void **state) {
   htable   = hash_new_str(capacity);
 
   /* 25 is not a prime number */
-  assert_true(htable->capacity > 3);
+  ASSERT(htable->capacity > 3);
 
   count = 1000;
 
@@ -40,16 +39,16 @@ test_htable(void **state) {
 
     /* test find value */
     found = hash_get(htable, key);
-    assert_non_null(found);
+    ASSERT(found);
 
     /* found values must be same */
-    assert_ptr_equal(key, found);
+    ASSERT(key == found);
     inserted_items[i] = key;
   }
 
   /* increase size */
   hash_resize(htable, 9);
-  assert_true(htable->count == 2);
+  ASSERT(htable->count == 2);
 
   for (i = 0; i < count; i++) {
     /* random key length */
@@ -62,10 +61,10 @@ test_htable(void **state) {
 
     /* test find value */
     found = hash_get(htable, key);
-    assert_non_null(found);
+    ASSERT(found);
 
     /* found values must be same */
-    assert_ptr_equal(key, found);
+    ASSERT(key == found);
     inserted_items[i] = key;
 
     if (i == 0 || i == 10 || i == 50) {
@@ -75,7 +74,7 @@ test_htable(void **state) {
       hash_unset(htable, key);
 
       found = hash_get(htable, key);
-      assert_null(found);
+      ASSERT(!found);
 
       /* allow only once */
       hash_set(htable, key, key);
@@ -86,7 +85,7 @@ test_htable(void **state) {
       hash_set(htable, key, NULL);
 
       found = hash_get(htable, key);
-      assert_null(found);
+      ASSERT(!found);
     }
   }
 
@@ -96,11 +95,11 @@ test_htable(void **state) {
 
   /* increase size */
   hash_resize(htable, 100);
-  assert_true(htable->count == count);
+  ASSERT(htable->count == count);
 
   /* decrease size */
   hash_resize(htable, 15);
-  assert_true(htable->count == count);
+  ASSERT(htable->count == count);
 
   for (i = 0; i < 10; i++) {
     /* random key length */
@@ -113,16 +112,16 @@ test_htable(void **state) {
 
     /* test find value */
     found = hash_get(htable, key);
-    assert_non_null(found);
+    ASSERT(found);
 
     /* found values must be same */
-    assert_ptr_equal(key, found);
+    ASSERT(key == found);
     inserted_items[i] = key;
 
     if (i == 10 || i == 50) {
       hash_unset(htable, key);
       found = hash_get(htable, key);
-      assert_null(found);
+      ASSERT(!found);
     }
   }
 
@@ -132,5 +131,7 @@ test_htable(void **state) {
   htable->hashfn = ds_hashfn_sdbm;
 
   hash_resize(htable, 50);
-  assert_true(htable->count == count);
+  ASSERT(htable->count == count);
+
+  TEST_SUCCESS
 }

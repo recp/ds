@@ -16,8 +16,7 @@ test_flist_onfree(FList *flist, FListItem *item) {
   free(item->data);
 }
 
-void
-test_flist(void **state) {
+TEST_IMPL(flist) {
   FList *flist;
   float *value;
   int    count, i;
@@ -35,24 +34,24 @@ test_flist(void **state) {
     /* test insert */
     if (i % 2 == 0) {
       flist_insert(flist, value);
-      assert_non_null(flist->first);
-      assert_non_null(flist->last);
+      ASSERT(flist->first);
+      ASSERT(flist->last);
     }
 
     /* test append */
     else {
       flist_append(flist, value);
-      assert_non_null(flist->first);
-      assert_non_null(flist->last);
+      ASSERT(flist->first);
+      ASSERT(flist->last);
     }
 
     /* test find node */
-    assert_true(flist_contains(flist, value));
+    ASSERT(flist_contains(flist, value));
 
     /* test remove */
     if (i == 0) {
       flist_remove_by(flist, value);
-      assert_false(flist_contains(flist, value));
+      ASSERT(!flist_contains(flist, value));
     }
 
     /* test remove by item */
@@ -60,12 +59,12 @@ test_flist(void **state) {
       FListItem *item;
       float     *val;
 
-      assert(flist_last(flist) == flist_at(flist, 9));
+      ASSERT(flist_last(flist) == flist_at(flist, 9));
       
       item = flist->first;
       val  = item->data;
       flist_remove(flist, item);
-      assert_false(flist_contains(flist, val));
+      ASSERT(!flist_contains(flist, val));
     }
 
     if (i == 20 && flist->last) {
@@ -74,17 +73,21 @@ test_flist(void **state) {
 
       item = flist->last;
       val  = item->data;
+
       flist_remove(flist, item);
+
       if (flist->first)
-        assert_non_null(flist->last);
-      assert_false(flist_contains(flist, val));
+        ASSERT(flist->last);
+
+      ASSERT(!flist_contains(flist, val));
     }
 
     if (i == 30) {
       void *val;
       val = flist->last->data;
+
       flist_remove_by(flist, val);
-      assert_false(flist_contains(flist, val));
+      ASSERT(!flist_contains(flist, val));
     }
 
     /* pick random item */
@@ -105,16 +108,18 @@ test_flist(void **state) {
       flist_remove(flist, item1);
       flist_remove(flist, item2);
 
-      assert_false(flist_contains(flist, val1));
-      assert_false(flist_contains(flist, val2));
+      ASSERT(!flist_contains(flist, val1));
+      ASSERT(!flist_contains(flist, val2));
     }
 
     /* test empty */
     if (i == 100) {
       flist_empty(flist);
-      assert_true(flist_isempty(flist));
+      ASSERT(flist_isempty(flist));
     }
   }
 
   flist_destroy(flist);
+
+  TEST_SUCCESS
 }

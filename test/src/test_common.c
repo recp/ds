@@ -4,8 +4,7 @@
  */
 
 #include "test_common.h"
-#include <stdlib.h>
-#include <string.h>
+#include <time.h>
 
 void
 rand_str(char *dest, size_t length) {

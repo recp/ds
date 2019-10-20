@@ -6,11 +6,12 @@
 #ifndef test_common_h
 #define test_common_h
 
+#include "../include/common.h"
+
 #include <stdarg.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <setjmp.h>
-#include <cmocka.h>
 #include <time.h>
 
 #include <stdlib.h>

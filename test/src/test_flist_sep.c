@@ -5,9 +5,9 @@
 
 #include "test_common.h"
 #include <ds/forward-list-sep.h>
+#include <time.h>
 
-void
-test_flist_sep(void **state) {
+TEST_IMPL(flist_sep) {
   FListItem *first;
   float     *value;
   int       count, i;
@@ -24,22 +24,22 @@ test_flist_sep(void **state) {
     /* test insert */
     if (i % 2 == 0) {
       flist_sp_insert(&first, value);
-      assert_non_null(first);
+      ASSERT(first);
     }
 
     /* test append */
     else {
       flist_sp_append(&first, value);
-      assert_non_null(first);
+      ASSERT(first);
     }
 
     /* test find node */
-    assert_true(flist_sp_contains(&first, value));
+    ASSERT(flist_sp_contains(&first, value));
 
     /* test remove */
     if (i == 0) {
       flist_sp_remove_by(&first, value);
-      assert_false(flist_sp_contains(&first, value));
+      ASSERT(!flist_sp_contains(&first, value));
     }
 
     /* test remove by item */
@@ -47,19 +47,19 @@ test_flist_sep(void **state) {
       FListItem *item;
       float     *val;
 
-      assert(flist_sp_last(&first) == flist_sp_at(&first, 9));
+      ASSERT(flist_sp_last(&first) == flist_sp_at(&first, 9));
       
       item = first;
       val  = item->data;
       flist_sp_remove(&first, item);
-      assert_false(flist_sp_contains(&first, val));
+      ASSERT(!flist_sp_contains(&first, val));
     }
 
     if (i == 30) {
       void *val;
       val = first->data;
       flist_sp_remove_by(&first, val);
-      assert_false(flist_sp_contains(&first, val));
+      ASSERT(!flist_sp_contains(&first, val));
     }
 
     /* pick random item */
@@ -80,17 +80,19 @@ test_flist_sep(void **state) {
       flist_sp_remove(&first, item1);
       flist_sp_remove(&first, item2);
 
-      assert_false(flist_sp_contains(&first, val1));
-      assert_false(flist_sp_contains(&first, val2));
+      ASSERT(!flist_sp_contains(&first, val1));
+      ASSERT(!flist_sp_contains(&first, val2));
     }
 
     /* test empty */
     if (i == 100) {
       flist_sp_destroy(&first);
-      assert_null(first);
+      ASSERT(!first);
     }
   }
 
   flist_sp_destroy(&first);
+
+  TEST_SUCCESS
 }
 
