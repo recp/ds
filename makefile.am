@@ -30,7 +30,8 @@ test_tests_LDFLAGS = $(checkLDFLAGS)
 test_tests_CFLAGS  = $(checkCFLAGS)
 
 dsdir=$(includedir)/ds
-ds_HEADERS = include/ds/rb.h \
+ds_HEADERS = include/ds/version.h \
+             include/ds/rb.h \
              include/ds/util.h \
              include/ds/common.h \
              include/ds/allocator.h \

@@ -54,3 +54,5 @@ test-driver
 *.gcda
 tests.trs
 tests
+
+build/

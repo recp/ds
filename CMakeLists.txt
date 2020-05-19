@@ -1,0 +1,78 @@
+cmake_minimum_required(VERSION 3.8.2)
+project(ds VERSION 0.2.2 LANGUAGES C)
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED YES)
+set(DEFAULT_BUILD_TYPE "Release")
+
+set(DS_BUILD)
+option(DS_SHARED "Shared build" ON)
+option(DS_STATIC "Static build" OFF)
+option(DS_USE_C99 "" OFF)
+option(DS_USE_TEST "Enable Tests" OFF)
+
+if(NOT DS_STATIC AND DS_SHARED)
+  set(DS_BUILD SHARED)
+else(DS_STATIC)
+  set(DS_BUILD STATIC)
+endif()
+
+if(DS_USE_C99)
+  set(C_STANDARD 99)
+endif()
+
+if(MSVC)
+	add_definitions(-DNDEBUG -D_WINDOWS -D_USRDLL -DDS_EXPORTS -DDS_DLL)
+	add_compile_options(/W3 /Ox /Gy /Oi /TC)
+else()
+  add_compile_options(-Wall -Werror -O3)
+endif()
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified.")
+  set(CMAKE_BUILD_TYPE "${DEFAULT_BUILD_TYPE}" CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
+include(GNUInstallDirs)
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)
+
+# Target Start
+add_library(${PROJECT_NAME}
+  ${DS_BUILD}
+  src/default/default.c
+  src/allocator.c
+  src/util.c
+  src/rb.c
+  src/forward_list.c
+  src/flist_separate.c
+  src/hash_table.c
+  src/hash_funcs.c
+  src/sort/sort.c
+  )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+                              VERSION ${PROJECT_VERSION} 
+                            SOVERSION ${PROJECT_VERSION_MAJOR})
+
+target_include_directories(${PROJECT_NAME} PRIVATE include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Install 
+install(TARGETS ${PROJECT_NAME}
+        EXPORT  ${PROJECT_NAME}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+install(DIRECTORY include/${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        PATTERN ".*" EXCLUDE)
+
+# Test Configuration
+if(DS_USE_TEST)
+  include(CTest)
+  enable_testing()
+  add_subdirectory(test)
+endif()
