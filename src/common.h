@@ -35,4 +35,8 @@
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
+#if defined(_WIN32)
+#  include <malloc.h>
+#endif
+
 #endif /* ds_src_common_h */
