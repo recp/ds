@@ -59,16 +59,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
                               VERSION ${PROJECT_VERSION} 
                             SOVERSION ${PROJECT_VERSION_MAJOR})
 
-target_include_directories(${PROJECT_NAME} PRIVATE include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-# Install 
-install(TARGETS ${PROJECT_NAME}
-        EXPORT  ${PROJECT_NAME}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
-install(DIRECTORY include/${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        PATTERN ".*" EXCLUDE)
+target_include_directories(${PROJECT_NAME}
+    PUBLIC 
+        $<INSTALL_INTERFACE:include>    
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
 # Test Configuration
 if(DS_USE_TEST)
@@ -76,3 +73,24 @@ if(DS_USE_TEST)
   enable_testing()
   add_subdirectory(test)
 endif()
+
+# Install 
+install(TARGETS ${PROJECT_NAME}
+        EXPORT  ${PROJECT_NAME}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+install(DIRECTORY include/${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        PATTERN ".*" EXCLUDE)
+
+# Config
+export(TARGETS ${PROJECT_NAME}
+       NAMESPACE ${PROJECT_NAME}::
+       FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+)
+
+install(EXPORT      ${PROJECT_NAME}
+        NAMESPACE   ${PROJECT_NAME}::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/cmake)
+
