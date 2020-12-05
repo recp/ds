@@ -25,4 +25,8 @@
 #define DS_ITOP(I)    ((void *)(uintptr_t)I)
 #define DS_PTOI(I, T) ((T)(uintptr_t)I)
 
+/* pack key (e.g non-null terminated string) and its length */
+#define DS_KEYnLEN(KEY, LEN)                                                  \
+   ((void *[]){(void *)KEY, (void *)(uintptr_t)LEN})
+
 #endif /* common_h */
