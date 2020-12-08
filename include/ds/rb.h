@@ -139,8 +139,7 @@ rb_remove(RBTree *tree,
  */
 DS_EXPORT
 void*
-rb_find(RBTree *tree,
-        void   *key);
+rb_find(RBTree * __restrict tree, void * __restrict key);
 
 /*!
  * @brief find node by key. It returns RBnode you can get value from node
@@ -152,8 +151,40 @@ rb_find(RBTree *tree,
  */
 DS_EXPORT
 RBNode*
-rb_find_node(RBTree *tree,
-             void   *key);
+rb_find_node(RBTree * __restrict tree, void * __restrict key);
+
+/*!
+ * @brief find value by key with cmp
+ *
+ * for instance you can compare null-terminated string key with non-null
+ * terminated string by providing cmp func for find
+ *
+ * @param[in] tree rbtree
+ * @param[in] key  key
+ *
+ * @return found value or NULL
+ */
+DS_EXPORT
+void*
+rb_find_by(RBTree * __restrict tree, void * __restrict key, const DsCmpFn cmp);
+
+/*!
+ * @brief find node by key with cmp.
+ *        It returns RBnode you can get value from node
+ *
+ * for instance you can compare null-terminated string key with non-null
+ * terminated string by providing cmp func for find
+ *
+ * @param[in] tree rbtree
+ * @param[in] key  key
+ *
+ * @return found RBNode or NULL
+ */
+DS_EXPORT
+RBNode*
+rb_find_node_by(RBTree * __restrict tree,
+                void   * __restrict key,
+                const DsCmpFn       cmp);
 
 /*!
  * @brief get parent node of found node (of key). This will lookup for node

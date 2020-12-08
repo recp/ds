@@ -541,9 +541,9 @@ rb_remove(RBTree *tree, void *key) {
 
 DS_EXPORT
 void*
-rb_find(RBTree *tree, void *key) {
+rb_find(RBTree * __restrict tree, void * __restrict key) {
   RBNode *found;
-  found = rb_find_node(tree, key);
+  found = rb_find_node_by(tree, key, tree->cmp);
   if (found == NULL)
     return NULL;
 
@@ -552,15 +552,37 @@ rb_find(RBTree *tree, void *key) {
 
 DS_EXPORT
 RBNode*
-rb_find_node(RBTree *tree, void *key) {
-  RBNode *iter;
+rb_find_node(RBTree * __restrict tree, void * __restrict key) {
+  return rb_find_node_by(tree, key, tree->cmp);
+}
 
-  iter = tree->root->chld[RB_RIGHT];
+DS_EXPORT
+void*
+rb_find_by(RBTree * __restrict tree,
+           void   * __restrict key,
+           const DsCmpFn       cmp) {
+  RBNode *found;
+  found = rb_find_node_by(tree, key, cmp);
+  if (found == NULL)
+    return NULL;
 
-  while (iter != tree->nullNode) {
+  return found->val;
+}
+
+DS_EXPORT
+RBNode*
+rb_find_node_by(RBTree * __restrict tree,
+                void   * __restrict key,
+                const DsCmpFn       cmp) {
+  RBNode *iter, *nullNode;
+
+  iter     = tree->root->chld[RB_RIGHT];
+  nullNode = tree->nullNode;
+
+  while (iter != nullNode) {
     int cmpRet;
 
-    cmpRet = tree->cmp(iter->key, key);
+    cmpRet = cmp(iter->key, key);
 
     if (cmpRet == 0)
       break;
@@ -568,7 +590,7 @@ rb_find_node(RBTree *tree, void *key) {
     iter = iter->chld[cmpRet < 0];
   }
 
-  if (!iter || iter == tree->nullNode)
+  if (!iter || iter == nullNode)
     return NULL;
 
   return iter;
