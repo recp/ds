@@ -52,6 +52,8 @@ main(int argc, const char * argv[]) {
 - [ ] dynamic array
 - [ ] octree
 - [ ] quadtree
+- [ ] kd-tree
+- [ ] bvh
 - [ ] b-tree
 
 ## Build
