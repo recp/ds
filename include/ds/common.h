@@ -6,8 +6,10 @@
 #ifndef common_h
 #define common_h
 
-#if defined(_WIN32)
-#  ifdef LIBDS_DLL
+#if defined(_MSC_VER)
+#  ifdef DS_STATIC
+#    define DS_EXPORT
+#  elif defined(DS_EXPORTS)
 #    define DS_EXPORT __declspec(dllexport)
 #  else
 #    define DS_EXPORT __declspec(dllimport)
