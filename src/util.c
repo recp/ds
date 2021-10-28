@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <inttypes.h>
 
 DS_EXPORT
 int
@@ -107,25 +108,25 @@ ds_print_ptr(void *key) {
 DS_EXPORT
 void
 ds_print_i32(void *key) {
-  printf("\t%d\n", *(int32_t *)key);
+  printf("\t%" PRId32  "\n", *(int32_t *)key);
 }
 
 DS_EXPORT
 void
 ds_print_ui32(void *key) {
-  printf("\t%u\n", *(uint32_t *)key);
+  printf("\t%" PRIu32 "\n", *(uint32_t *)key);
 }
 
 DS_EXPORT
 void
 ds_print_i64(void *key) {
-  printf("\t%llu\n", *(int64_t *)key);
+  printf("\t%" PRId64 "\n", *(int64_t *)key);
 }
 
 DS_EXPORT
 void
 ds_print_ui64(void *key) {
-  printf("\t%llu\n", *(uint64_t *)key);
+  printf("\t%" PRIu64 "\n", *(uint64_t *)key);
 }
 
 DS_EXPORT
