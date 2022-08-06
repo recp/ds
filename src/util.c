@@ -136,7 +136,7 @@ ds_prime_num(int32_t min) {
 
   /* find closest prime */
 again:
-  for(min++, i = 2; i <= min / 2; ++i) {
+  for(min++, i = 2; i <= (min >> 1); ++i) {
     if(min % i == 0)
       goto again;
   }
