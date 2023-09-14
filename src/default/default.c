@@ -23,6 +23,6 @@ DsAllocator ds__alc = {
 
 DS_HIDE
 DsAllocator*
-ds_def_alc() {
+ds_def_alc(void) {
   return &ds__alc;
 }

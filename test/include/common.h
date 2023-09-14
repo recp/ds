@@ -56,7 +56,7 @@ typedef struct test_entry_t {
 
 #define TEST_IMPL_ARG1(FUN) \
   test_status_t test_ ## FUN (void);                                          \
-  test_status_t test_ ## FUN()
+  test_status_t test_ ## FUN(void)
 
 #define TEST_IMPL_ARG2(PREFIX, FUN) TEST_IMPL_ARG1(PREFIX ## FUN)
 #define TEST_IMPL_ARG3(arg1, arg2, arg3, ...) arg3

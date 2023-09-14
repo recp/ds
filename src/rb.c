@@ -143,13 +143,13 @@ rb_newtree(DsAllocator *allocator,
 
 DS_EXPORT
 RBTree*
-rb_newtree_str() {
+rb_newtree_str(void) {
   return rb_newtree(NULL, NULL, NULL);
 }
 
 DS_EXPORT
 RBTree*
-rb_newtree_ptr() {
+rb_newtree_ptr(void) {
   return rb_newtree(NULL,
                     ds_cmp_ptr,
                     ds_print_ptr);
