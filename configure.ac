@@ -8,7 +8,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([ds], [0.2.2], [info@recp.me])
-AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects serial-tests])
+AM_INIT_AUTOMAKE([-Wall foreign subdir-objects serial-tests])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src/])
