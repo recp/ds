@@ -58,28 +58,52 @@ main(int argc, const char * argv[]) {
 
 ## Build
 
-### Unix (Autotools)
+ds uses CMake on macOS, Linux and Windows. It can be built as a standalone
+project, embedded with `add_subdirectory()` or installed and used with
+`find_package()`.
+
+### Standalone CMake build
 
 ```bash
-$ sh autogen.sh
-$ ./configure
-$ make
-$ make check # [Optional]
-$ [sudo] make install # [Optional]
+$ cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+$ cmake --build build
+$ cmake --install build # [Optional]
 ```
 
-### Windows (MSBuild)
-Windows related build, project files are located in `win` folder,
-make sure that you are inside in the `libds/win` folder.
-Code Analysis are enabled, it may take awhile to finish build
+For Visual Studio or other multi-config generators:
 
 ```Powershell
-$ cd win
-$ .\build.bat
+$ cmake -S . -B build
+$ cmake --build build --config Release
+$ cmake --install build --config Release # [Optional]
 ```
-if `msbuild` didn't work then you can try to build it with `devenv`:
-```Powershell
-$ devenv libds.sln /Build Release
+
+Release builds use the platform compiler's optimized release mode. `DS_ENABLE_LTO`
+can be enabled for link-time optimization when the compiler and generator support
+it.
+
+### Embedded in another CMake project
+
+```cmake
+cmake_minimum_required(VERSION 3.8.2)
+
+project(my_app LANGUAGES C)
+
+add_subdirectory(external/ds)
+
+add_executable(my_app src/main.c)
+target_link_libraries(my_app PRIVATE ds::ds)
+```
+
+When embedded, ds does not force a default build type on the parent project.
+
+### Installed package
+
+After `cmake --install`, consumers can use:
+
+```cmake
+find_package(ds CONFIG REQUIRED)
+target_link_libraries(my_app PRIVATE ds::ds)
 ```
 
 ## License
