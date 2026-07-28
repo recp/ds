@@ -23,6 +23,8 @@ TEST_DECLARE(rb_topdown_custom_cmp)
 TEST_DECLARE(rb_topdown_freeenode)
 TEST_DECLARE(rb_topdown_custom_cmp_i32)
 TEST_DECLARE(rb_topdown_custom_cmp_i64)
+TEST_DECLARE(rb_topdown_mixed_stress)
+TEST_DECLARE(rb_comparator_edges)
 
 /* forward list */
 TEST_DECLARE(flist)
@@ -41,6 +43,8 @@ TEST_LIST {
   TEST_ENTRY(rb_topdown_freeenode)
   TEST_ENTRY(rb_topdown_custom_cmp_i32)
   TEST_ENTRY(rb_topdown_custom_cmp_i64)
+  TEST_ENTRY(rb_topdown_mixed_stress)
+  TEST_ENTRY(rb_comparator_edges)
 
   /* forward list */
   TEST_ENTRY(flist)

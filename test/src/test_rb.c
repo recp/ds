@@ -8,6 +8,7 @@
 
 /* keep top 2000 to test remove */
 static char *inserted_items[2000];
+static size_t test_rb_freed_nodes;
 
 static
 int
@@ -36,6 +37,8 @@ test_rb_freenode(RBTree *tree, RBNode *node) {
   assert(node);
   assert(node->val);
 
+  test_rb_freed_nodes++;
+
   /* free value */
   free(node->val);
 }
@@ -43,7 +46,7 @@ test_rb_freenode(RBTree *tree, RBNode *node) {
 static
 void
 test_rb_foundkey(RBTree *tree, void* key, bool *replace) {
-  printf("duplicated key: '%s'\n", key);
+  printf("duplicated key: '%s'\n", (char *)key);
   *replace = true;
 }
 
@@ -389,6 +392,7 @@ TEST_IMPL(rb_topdown_freeenode) {
   RBNode   *node;
   float    *key;
   void     *found;
+  size_t    insertedCount;
   int       count, i;
 
   count = 1000;
@@ -396,6 +400,7 @@ TEST_IMPL(rb_topdown_freeenode) {
                      test_rb_cmp_float,
                      test_rb_print_float);
   tree->onFreeNode = test_rb_freenode;
+  test_rb_freed_nodes = 0u;
 
   srand((unsigned int)time(NULL));
 
@@ -422,15 +427,124 @@ TEST_IMPL(rb_topdown_freeenode) {
   }
 
   /* we removed all nodes */
+  insertedCount = tree->count;
   rb_empty(tree);
   ASSERT(rb_isempty(tree));
+  ASSERT(test_rb_freed_nodes == insertedCount);
 
   key  = malloc(sizeof(*key));
-  *key = (float)drand48();
+  *key = 2.0f;
   rb_insert(tree, key, key);
-  rb_print(tree);
+  rb_remove(tree, key);
+  ASSERT(rb_isempty(tree));
+  ASSERT(tree->count == 0u);
+  ASSERT(test_rb_freed_nodes == insertedCount + 1u);
 
+  key  = malloc(sizeof(*key));
+  *key = 3.0f;
+  rb_insert(tree, key, key);
   rb_destroy(tree);
+  ASSERT(test_rb_freed_nodes == insertedCount + 2u);
+
+  TEST_SUCCESS
+}
+
+static
+uint64_t
+test_rb_next_random(uint64_t *state) {
+  uint64_t value;
+
+  value = *state;
+  value ^= value << 13;
+  value ^= value >> 7;
+  value ^= value << 17;
+  *state = value;
+  return value;
+}
+
+TEST_IMPL(rb_topdown_mixed_stress) {
+  enum { KEY_COUNT = 512, OP_COUNT = 200000 };
+  RBTree  *tree;
+  uint64_t randomState;
+  bool     present[KEY_COUNT];
+  size_t   expectedCount;
+  int      op;
+
+  tree = rb_newtree_ptr();
+  randomState = UINT64_C(0x9e3779b97f4a7c15);
+  expectedCount = 0u;
+  memset(present, 0, sizeof(present));
+
+  for (op = 0; op < OP_COUNT; op++) {
+    uintptr_t key;
+    void     *pointerKey;
+
+    key = (uintptr_t)(test_rb_next_random(&randomState) % KEY_COUNT);
+    pointerKey = (void *)(key + 1u);
+
+    if ((test_rb_next_random(&randomState) & 3u) != 0u) {
+      rb_insert(tree, pointerKey, pointerKey);
+      if (!present[key]) {
+        present[key] = true;
+        expectedCount++;
+      }
+    } else {
+      rb_remove(tree, pointerKey);
+      if (present[key]) {
+        present[key] = false;
+        expectedCount--;
+      }
+    }
+
+    if ((op & 63) == 0) {
+      uintptr_t probe;
+
+      ASSERT(tree->count == expectedCount);
+      ASSERT(rb_assert(tree, tree->root->chld[1]));
+      for (probe = 0u; probe < KEY_COUNT; probe++) {
+        void *found;
+
+        found = rb_find(tree, (void *)(probe + 1u));
+        ASSERT((found != NULL) == present[probe]);
+      }
+    }
+  }
+
+  rb_empty(tree);
+  ASSERT(rb_isempty(tree));
+  ASSERT(tree->count == 0u);
+  rb_destroy(tree);
+
+  TEST_SUCCESS
+}
+
+TEST_IMPL(rb_comparator_edges) {
+  int32_t  i32min, i32max;
+  uint32_t u32min, u32max;
+  int64_t  i64min, i64max;
+  uint64_t u64min, u64max;
+
+  i32min = INT32_MIN;
+  i32max = INT32_MAX;
+  u32min = 0u;
+  u32max = UINT32_MAX;
+  i64min = INT64_MIN;
+  i64max = INT64_MAX;
+  u64min = 0u;
+  u64max = UINT64_MAX;
+
+  ASSERT(ds_cmp_i32(&i32min, &i32max) < 0);
+  ASSERT(ds_cmp_i32(&i32max, &i32min) > 0);
+  ASSERT(ds_cmp_ui32(&u32min, &u32max) < 0);
+  ASSERT(ds_cmp_ui32(&u32max, &u32min) > 0);
+  ASSERT(ds_cmp_i64(&i64min, &i64max) < 0);
+  ASSERT(ds_cmp_i64(&i64max, &i64min) > 0);
+  ASSERT(ds_cmp_ui64(&u64min, &u64max) < 0);
+  ASSERT(ds_cmp_ui64(&u64max, &u64min) > 0);
+  ASSERT(ds_cmp_ptr((void *)(uintptr_t)1u,
+                    (void *)(uintptr_t)UINTPTR_MAX) < 0);
+  ASSERT(ds_cmp_ptr((void *)(uintptr_t)UINTPTR_MAX,
+                    (void *)(uintptr_t)1u) > 0);
 
   TEST_SUCCESS
 }

@@ -20,11 +20,11 @@ ds_cmp_str(void * key1, void *key2) {
 DS_EXPORT
 int
 ds_cmp_ptr(void *key1, void *key2) {
-  if (key1 > key2)
-    return 1;
-  else if (key1 < key2)
-    return -1;
-  return 0;
+  uintptr_t a, b;
+
+  a = (uintptr_t)key1;
+  b = (uintptr_t)key2;
+  return (a > b) - (a < b);
 }
 
 DS_EXPORT
@@ -35,7 +35,7 @@ ds_cmp_i32(void *key1, void *key2) {
   a = *(int32_t *)key1;
   b = *(int32_t *)key2;
 
-  return a - b;
+  return (a > b) - (a < b);
 }
 
 DS_EXPORT
@@ -46,7 +46,7 @@ ds_cmp_ui32(void *key1, void *key2) {
   a = *(uint32_t *)key1;
   b = *(uint32_t *)key2;
   
-  return a - b;
+  return (a > b) - (a < b);
 }
 
 DS_EXPORT
@@ -57,7 +57,7 @@ ds_cmp_i32p(void *key1, void *key2) {
   a = (int32_t)(intptr_t)key1;
   b = (int32_t)(intptr_t)key2;
 
-  return a - b;
+  return (a > b) - (a < b);
 }
 
 DS_EXPORT
@@ -68,7 +68,7 @@ ds_cmp_ui32p(void *key1, void *key2) {
   a = (uint32_t)(uintptr_t)key1;
   b = (uint32_t)(uintptr_t)key2;
 
-  return a - b;
+  return (a > b) - (a < b);
 }
 
 DS_EXPORT
@@ -79,7 +79,7 @@ ds_cmp_i64(void *key1, void *key2) {
   a = *(int64_t *)key1;
   b = *(int64_t *)key2;
 
-  return (int)(a - b);
+  return (a > b) - (a < b);
 }
 
 DS_EXPORT
@@ -90,7 +90,7 @@ ds_cmp_ui64(void *key1, void *key2) {
   a = *(uint64_t *)key1;
   b = *(uint64_t *)key2;
 
-  return (int)(a - b);
+  return (a > b) - (a < b);
 }
 
 DS_EXPORT

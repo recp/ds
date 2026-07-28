@@ -55,6 +55,14 @@ static
 void
 rb_free(RBTree *tree, RBNode *node);
 
+static
+int
+rb_asserti(RBTree *tree,
+           RBNode *root,
+           void   *minimum,
+           void   *maximum,
+           size_t *visited);
+
 /* ------------------------------------------------------------------------- */
 
 static
@@ -165,6 +173,7 @@ rb_empty(RBTree *tree) {
     rb_free(tree, tree->root->chld[RB_RIGHT]);
 
   tree->root->chld[RB_RIGHT] = tree->nullNode;
+  tree->count = 0;
 }
 
 DS_EXPORT
@@ -203,13 +212,13 @@ rb_insert(RBTree *tree,
   alc = tree->alc;
 
   replace = rb_replace;
-  newnode = alc->malloc(sizeof(*newnode));
-  newnode->chld[RB_LEFT]  = tree->nullNode;
-  newnode->chld[RB_RIGHT] = tree->nullNode;
-  newnode->key = key;
-  newnode->val = val;
 
   if (tree->root->chld[RB_RIGHT] == tree->nullNode) {
+    newnode = alc->malloc(sizeof(*newnode));
+    newnode->chld[RB_LEFT]  = tree->nullNode;
+    newnode->chld[RB_RIGHT] = tree->nullNode;
+    newnode->key = key;
+    newnode->val = val;
     RB_MKBLCK(newnode);
     tree->root->chld[RB_RIGHT] = newnode;
     tree->count++;
@@ -286,10 +295,11 @@ rb_insert(RBTree *tree,
         tree->onFound(tree, key, &replace);
 
       if (!replace)
-        goto err;
+        goto done;
 
-      /* replace */
-      goto repl;
+      X->key = key;
+      X->val = val;
+      goto done;
     }
 
     sQ  = sG;
@@ -303,6 +313,11 @@ rb_insert(RBTree *tree,
     X   = X->chld[sX];
   } while (X != tree->nullNode);
 
+  newnode = alc->malloc(sizeof(*newnode));
+  newnode->chld[RB_LEFT]  = tree->nullNode;
+  newnode->chld[RB_RIGHT] = tree->nullNode;
+  newnode->key = key;
+  newnode->val = val;
   X = P->chld[sX] = newnode;
 
   /* make current red */
@@ -340,16 +355,8 @@ rb_insert(RBTree *tree,
 
   return;
 
-repl:
-  newnode->chld[RB_LEFT]  = X->chld[RB_LEFT];
-  newnode->chld[RB_RIGHT] = X->chld[RB_RIGHT];
-  newnode->color          = X->color;
-
-  alc->free(X);
-  P->chld[sX] = newnode;
-  return;
-err:
-  alc->free(newnode);
+done:
+  RB_MKBLCK(tree->root->chld[RB_RIGHT]);
 }
 
 DS_EXPORT
@@ -535,6 +542,9 @@ rb_remove(RBTree *tree, void *key) {
     G->chld[sP] = tree->nullNode;
   }
 
+  if (tree->onFreeNode)
+    tree->onFreeNode(tree, toDel);
+
   alc->free(toDel);
   tree->count--;
 }
@@ -658,17 +668,33 @@ rb_walk(RBTree *tree, RBNodeFn walkFn) {
  simple assertion for rbtree
  source: Eternally Confuzzled
  */
-DS_EXPORT
+static
 int
-rb_assert(RBTree *tree, RBNode *root) {
+rb_asserti(RBTree *tree,
+           RBNode *root,
+           void   *minimum,
+           void   *maximum,
+           size_t *visited) {
   RBNode *ln, *rn;
   int     lh, rh;
 
   if (root == tree->nullNode)
     return 1;
 
+  if (!root || *visited >= tree->count) {
+    puts("Cycle or node count violation");
+    return 0;
+  }
+  (*visited)++;
+
   ln = root->chld[0];
   rn = root->chld[1];
+
+  if ((minimum && tree->cmp(root->key, minimum) <= 0)
+      || (maximum && tree->cmp(root->key, maximum) >= 0)) {
+    puts("Binary tree range violation");
+    return 0;
+  }
 
   /* Consecutive red links */
   if (RB_ISRED(root)) {
@@ -678,8 +704,8 @@ rb_assert(RBTree *tree, RBNode *root) {
     }
   }
 
-  lh = rb_assert(tree, ln);
-  rh = rb_assert(tree, rn);
+  lh = rb_asserti(tree, ln, minimum, root->key, visited);
+  rh = rb_asserti(tree, rn, root->key, maximum, visited);
 
   /* Invalid binary search tree */
   if ((ln != tree->nullNode
@@ -701,4 +727,31 @@ rb_assert(RBTree *tree, RBNode *root) {
     return RB_ISRED(root) ? lh : lh + 1;
 
   return 0;
+}
+
+DS_EXPORT
+int
+rb_assert(RBTree *tree, RBNode *root) {
+  size_t visited;
+  int    height;
+
+  if (!tree || !root)
+    return 0;
+
+  if (root == tree->nullNode)
+    return tree->count == 0u;
+
+  if (root == tree->root->chld[RB_RIGHT] && RB_ISRED(root)) {
+    puts("Root color violation");
+    return 0;
+  }
+
+  visited = 0u;
+  height = rb_asserti(tree, root, NULL, NULL, &visited);
+  if (root == tree->root->chld[RB_RIGHT] && visited != tree->count) {
+    puts("Node count violation");
+    return 0;
+  }
+
+  return height;
 }
