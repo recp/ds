@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(ds VERSION 0.2.2 LANGUAGES C)
+project(ds VERSION 0.2.3 LANGUAGES C)
 
 if(POLICY CMP0069)
   cmake_policy(SET CMP0069 NEW)

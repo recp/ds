@@ -10,6 +10,6 @@
 
 #define DS_VERSION_MAJOR 0
 #define DS_VERSION_MINOR 2
-#define DS_VERSION_PATCH 2
+#define DS_VERSION_PATCH 3
 
 #endif /* ds_version_h */
